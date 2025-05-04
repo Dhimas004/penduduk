@@ -16,7 +16,7 @@
                                             <i class="zmdi zmdi-search"></i>cari</button>
                                 </div> -->
                                 <div class="table-data__tool-right">
-                                    <a href="<?= base_url(); ?>kasrt/lapkas" class="au-btn au-btn-icon au-btn--blue au-btn--small" data-toggle="top">
+                                    <a href="<?= base_url(); ?>penduduk/lapkas" class="au-btn au-btn-icon au-btn--blue au-btn--small" data-toggle="top">
                                         <i class="zmdi zmdi-print"></i>print</a>
                                 </div>
                             </div>

@@ -55,7 +55,7 @@
                                     <span class="bot-line"></span>Warga</a>
                             </li>
                             <li>
-                                <a href="<?= base_url('kasRT/laporan'); ?>">
+                                <a href="<?= base_url('penduduk/laporan'); ?>">
                                     <i class="fas fa-bar-chart-o"></i>
                                     <span class="bot-line"></span>Laporan</a>
                             </li>

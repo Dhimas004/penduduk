@@ -4,12 +4,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class KasRT extends CI_Controller
 {
-	public function __construct() {
-        parent::__construct();
-        // Load model M_kas di dalam konstruktor
-        $this->load->model('M_kas');
-    }
-    
+	public function __construct()
+	{
+		parent::__construct();
+		// Load model M_kas di dalam konstruktor
+		$this->load->model('M_kas');
+	}
+
 	public function index()
 	{
 		$username = $this->session->userdata('username');
@@ -111,10 +112,10 @@ class KasRT extends CI_Controller
 		$this->m_kas->saveKas($data);
 		if ('jenis' == 'masuk') {
 			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil ditambahkan!</div>');
-			redirect('kasrt');
+			redirect('penduduk');
 		} else {
 			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil ditambahkan!</div>');
-			redirect('kasrt/kasKeluar');
+			redirect('penduduk/kasKeluar');
 		}
 	}
 
@@ -130,10 +131,10 @@ class KasRT extends CI_Controller
 		$this->m_kas->updateKas($data, $idKas);
 		if ('jenis' == 'masuk') {
 			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil diupdate!</div>');
-			redirect('kasrt');
+			redirect('penduduk');
 		} else {
 			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil diupdate!</div>');
-			redirect('kasrt/kasKeluar');
+			redirect('penduduk/kasKeluar');
 		}
 	}
 
@@ -142,10 +143,10 @@ class KasRT extends CI_Controller
 		$this->m_kas->delKas($idKas);
 		if ('jenis' == 'masuk') {
 			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil dihapus!</div>');
-			redirect('kasrt');
+			redirect('penduduk');
 		} else {
 			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil dihapus!</div>');
-			redirect('kasrt/kasKeluar');
+			redirect('penduduk/kasKeluar');
 		}
 	}
 
@@ -203,15 +204,16 @@ class KasRT extends CI_Controller
 		}
 	}
 
-	public function lapKas() {
-        $data['judul'] = 'Laporan Data Kas RT002';
-        $data['kas'] = $this->M_kas->getKas();
-        $data['kredit'] = $this->M_kas->kredit(); // Memanggil method kredit dari model
-        $data['masuk'] = $this->M_kas->TotalMasuk();
-        $data['keluar'] = $this->M_kas->TotalKeluar();
-        $data['konten'] = 'lap_kas';
-        $this->load->view('laporan/lap_kas', $data);
-    }
+	public function lapKas()
+	{
+		$data['judul'] = 'Laporan Data Kas RT002';
+		$data['kas'] = $this->M_kas->getKas();
+		$data['kredit'] = $this->M_kas->kredit(); // Memanggil method kredit dari model
+		$data['masuk'] = $this->M_kas->TotalMasuk();
+		$data['keluar'] = $this->M_kas->TotalKeluar();
+		$data['konten'] = 'lap_kas';
+		$this->load->view('laporan/lap_kas', $data);
+	}
 }
 
 /* End of file Controllername.php */

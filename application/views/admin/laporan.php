@@ -8,7 +8,7 @@
                             <div class="table-data__tool">
                                 <h3 class="title-5 m-b-35">laporan data kas</h3>
                                 <div class="table-data__tool-right">
-                                    <a href="<?= base_url(); ?>kasrt/lapkas" class="au-btn au-btn-icon au-btn--blue au-btn--small" data-toggle="top">
+                                    <a href="<?= base_url(); ?>penduduk/lapkas" class="au-btn au-btn-icon au-btn--blue au-btn--small" data-toggle="top">
                                         <i class="zmdi zmdi-print"></i>print</a>
                                 </div>
                             </div>
