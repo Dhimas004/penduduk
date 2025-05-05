@@ -7,7 +7,7 @@
         				<div class="col-md-12">
         					<div class="table-data__tool">
         						<div class="table-data__tool-left">
-        							<h3 class="title-5 m-b-35">data kas Masuk</h3>
+        							<h3 class="title-5">data kas Masuk</h3>
         						</div>
         						<div class="table-data__tool-right">
         							<button class="au-btn au-btn-icon au-btn--green au-btn--small" data-toggle="modal" data-target="#addKasMasukModal">
@@ -19,17 +19,20 @@
         						<table class="table table-borderless table-data3">
         							<thead>
         								<tr>
-        									<th>nomor</th>
-        									<th>keterangan</th>
-        									<th>tanggal</th>
-        									<th>jumlah</th>
-        									<th>aksi</th>
+        									<th>Nomor</th>
+        									<th>Nama Warga</th>
+        									<th>Keterangan</th>
+        									<th>Tanggal</th>
+        									<th>Jumlah</th>
+        									<th>Aksi</th>
         								</tr>
         							</thead>
         							<tbody>
-        								<?php foreach ($masuk as $msk) { ?>
+        								<?php
+										foreach ($masuk as $msk) { ?>
         									<tr>
         										<td><?= $msk->idKas; ?></td>
+        										<td><?= ($msk->idWarga != 0 ? $namaWarga[$msk->idWarga] : ''); ?></td>
         										<td><?= $msk->keterangan; ?></td>
         										<td><?= date('d-m-Y', strtotime($msk->tanggal)); ?></td>
         										<td class="process">Rp <?= rupiah($msk->jumlah); ?></td>
@@ -55,7 +58,7 @@
 										}
 										?>
         								<tr>
-        									<th colspan="3" scope="col">TOTAL <small>(Pemasukan)</small></th>
+        									<th colspan="4" scope="col">TOTAL <small>(Pemasukan)</small></th>
         									<th scope="col">Rp <?= rupiah($sum); ?></th>
         									<th scope="col">&nbsp;</th>
         								</tr>
@@ -83,6 +86,17 @@
         							<div class="form-group">
         								<label>Nomor</label>
         								<input class="form-control" type="text" name="id_kas" id="id_kas" value="3000<?= sprintf("%04s", $idKas); ?>" readonly>
+        							</div>
+        							<div class="form-group">
+        								<label>Nama Warga</label>
+        								<select class="form-control" name="idWarga" id="idWarga" value="<?= set_value('idWarga'); ?>">
+        									<option>Pilih ...</option>
+        									<?php
+											foreach ($warga as $w) {
+												echo "<option value='" . $w->idWarga . "'>" . ucwords(strtolower($w->nama)) . "</option>";
+											}
+											?>
+        								</select>
         							</div>
         							<div class="form-group">
         								<label>Keterangan</label>
@@ -126,6 +140,21 @@
         						<div class="login-form">
         							<?= form_open_multipart('penduduk/editkas'); ?>
         							<input type="hidden" name="idKas" id="idKas" value="<?= $val->idKas; ?>">
+        							<div class="form-group">
+        								<label>Nomor</label>
+        								<input class="form-control" type="text" name="id_kas" id="id_kas" value="<?= $val->idKas; ?>" readonly>
+        							</div>
+        							<div class="form-group">
+        								<label>Nama Warga</label>
+        								<select class="form-control" name="idWarga" id="idWarga" value="<?= $val->idWarga; ?>">
+        									<option value="">Pilih ...</option>
+        									<?php
+											foreach ($warga as $w) {
+												echo "<option value='" . $w->idWarga . "' " . ($w->idWarga == $val->idWarga ? 'selected' : '') . ">" . ucwords(strtolower($w->nama)) . "</option>";
+											}
+											?>
+        								</select>
+        							</div>
         							<div class="form-group">
         								<label>Keterangan</label>
         								<textarea class="form-control" type="text" name="keterangan" id="keterangan" placeholder="Keterangan" required><?= $val->keterangan; ?></textarea>

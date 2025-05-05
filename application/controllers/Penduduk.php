@@ -20,6 +20,11 @@ class Penduduk extends CI_Controller
 		$getId = substr($cekId, 4, 4);
 		$idNow = $getId + 1;
 		$data = array('idKas' => $idNow);
+		$data['namaWarga'] = []; // Array untuk menyimpan nama warga
+		foreach ($this->m_kas->getWarga() as $w) {
+			$data['namaWarga'][$w->idWarga] = ucwords(strtolower($w->nama));
+		}
+
 
 		if ($username == '') {
 			redirect('auth');
@@ -30,6 +35,7 @@ class Penduduk extends CI_Controller
 				$data['user'] = $user;
 				$data['ttl'] = $this->m_kas->TotalMasuk();
 				$data['masuk'] = $this->m_kas->getKasMasuk();
+				$data['warga'] = $this->m_kas->getWarga();
 				$this->load->view('include/header', $data);
 				$this->load->view('admin/kasMasuk', $data);
 				$this->load->view('include/footer');
@@ -108,6 +114,7 @@ class Penduduk extends CI_Controller
 			'tanggal' => $this->input->post('tanggal'),
 			'jumlah' => $this->input->post('jumlah'),
 			'jenis' => $this->input->post('jenis'),
+			'idWarga' => $this->input->post('idWarga'),
 		];
 		$this->m_kas->saveKas($data);
 		if ('jenis' == 'masuk') {
@@ -127,6 +134,7 @@ class Penduduk extends CI_Controller
 			'tanggal' => $this->input->post('tanggal'),
 			'jumlah' => $this->input->post('jumlah'),
 			'jenis' => $this->input->post('jenis'),
+			'idWarga' => $this->input->post('idWarga'),
 		];
 		$this->m_kas->updateKas($data, $idKas);
 		if ('jenis' == 'masuk') {
@@ -134,7 +142,7 @@ class Penduduk extends CI_Controller
 			redirect('penduduk');
 		} else {
 			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil diupdate!</div>');
-			redirect('penduduk/kasKeluar');
+			redirect('penduduk');
 		}
 	}
 
@@ -154,12 +162,16 @@ class Penduduk extends CI_Controller
 	{
 		$username = $this->session->userdata('username');
 		$user = $this->db->get_where('users', ['username' => $username])->row_array();
+		$data['namaWarga'] = []; // Array untuk menyimpan nama warga
+		foreach ($this->m_kas->getWarga() as $w) {
+			$data['namaWarga'][$w->idWarga] = ucwords(strtolower($w->nama));
+		}
 		if ($username == '') {
 			redirect('auth');
 		} else {
 			if ($user['role_id'] == 1) {
 				$data['menu'] = 'Laporan';
-				$data['judul'] = 'Laporan Kas RT';
+				$data['judul'] = 'Laporan';
 				$data['user'] = $user;
 				$data['debit'] = $this->m_kas->getKasMasuk();
 				$data['kredit'] = $this->m_kas->getKasKeluar();
@@ -171,7 +183,7 @@ class Penduduk extends CI_Controller
 				$this->load->view('include/footer');
 			} else if ($user['role_id'] == 3) {
 				$data['menu'] = 'Laporan';
-				$data['judul'] = 'Laporan Kas RT';
+				$data['judul'] = 'Laporan';
 				$data['user'] = $user;
 				$data['kas'] = $this->m_kas->getKas();
 				$data['masuk'] = $this->m_kas->TotalMasuk();
@@ -181,7 +193,7 @@ class Penduduk extends CI_Controller
 				$this->load->view('include/footer');
 			} else if ($user['role_id'] == 2) {
 				$data['menu'] = 'Laporan';
-				$data['judul'] = 'Laporan Kas RT';
+				$data['judul'] = 'Laporan';
 				$data['user'] = $user;
 				$data['kas'] = $this->m_kas->getKas();
 				$data['masuk'] = $this->m_kas->TotalMasuk();
@@ -191,7 +203,7 @@ class Penduduk extends CI_Controller
 				$this->load->view('include/footer');
 			} else {
 				$data['menu'] = 'Laporan';
-				$data['judul'] = 'Laporan Kas RT';
+				$data['judul'] = 'Laporan';
 				$data['user'] = $user;
 				$data['kas'] = $this->m_kas->getKas();
 				$data['masuk'] = $this->m_kas->TotalMasuk();
@@ -205,7 +217,7 @@ class Penduduk extends CI_Controller
 
 	public function lapKas()
 	{
-		$data['judul'] = 'Laporan Data Kas RT002';
+		$data['judul'] = 'Laporan';
 		$data['kas'] = $this->M_kas->getKas();
 		$data['kredit'] = $this->M_kas->kredit(); // Memanggil method kredit dari model
 		$data['masuk'] = $this->M_kas->TotalMasuk();

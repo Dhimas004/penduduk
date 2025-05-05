@@ -61,6 +61,14 @@ class Warga extends CI_Controller
 			'tempat_lahir' => $this->input->post('tempat_lahir'),
 			'tanggal_lahir' => $this->input->post('tanggal_lahir'),
 			'alamat' => $this->input->post('alamat'),
+			'rt_rw' => $this->input->post('rt_rw'),
+			'status_perkawinan' => $this->input->post('status_perkawinan'),
+			'nama_pasangan' => $this->input->post('nama_pasangan'),
+			'nama_anak_1' => $this->input->post('nama_anak_1'),
+			'nama_anak_2' => $this->input->post('nama_anak_2'),
+			'nama_anak_3' => $this->input->post('nama_anak_3'),
+			'nama_anak_4' => $this->input->post('nama_anak_4'),
+			'nama_anak_5' => $this->input->post('nama_anak_5'),
 		];
 		$this->m_kas->saveWarga($data);
 
@@ -78,6 +86,14 @@ class Warga extends CI_Controller
 			'tempat_lahir' => $this->input->post('tempat_lahir'),
 			'tanggal_lahir' => $this->input->post('tanggal_lahir'),
 			'alamat' => $this->input->post('alamat'),
+			'rt_rw' => $this->input->post('rt_rw'),
+			'status_perkawinan' => $this->input->post('status_perkawinan'),
+			'nama_pasangan' => $this->input->post('nama_pasangan'),
+			'nama_anak_1' => $this->input->post('nama_anak_1'),
+			'nama_anak_2' => $this->input->post('nama_anak_2'),
+			'nama_anak_3' => $this->input->post('nama_anak_3'),
+			'nama_anak_4' => $this->input->post('nama_anak_4'),
+			'nama_anak_5' => $this->input->post('nama_anak_5'),
 		];
 		$this->m_kas->updateWarga($data, $idWarga);
 
@@ -98,6 +114,52 @@ class Warga extends CI_Controller
 		$data['query'] = $this->m_kas->getWarga();
 		$data['konten'] = 'lap_warga';
 		$this->load->view('laporan/lap_warga', $data);
+	}
+
+	public function detailWarga($idWarga)
+	{
+		$username = $this->session->userdata('username');
+		$user = $this->db->get_where('users', ['username' => $username])->row_array();
+		if ($username == '') {
+			redirect('auth');
+		} else {
+			if ($user['role_id'] == 1) {
+				$data['judul'] = 'Detail Warga';
+				$data['query'] = $this->m_kas->getWarga();
+				$data['user'] = $user;
+				$data['detailWarga'] = $this->m_kas->getWarga($idWarga);
+				$this->load->view('include/header', $data);
+				$this->load->view('warga/detail_warga', $data);
+				$this->load->view('include/footer');
+			} else if ($user['role_id'] == 3) {
+				$data['judul'] = 'Detail Warga';
+				$data['query'] = $this->m_kas->getWarga();
+				$data['konten'] = 'lap_warga';
+				$data['user'] = $user;
+				$data['detailWarga'] = $this->m_kas->getWarga($idWarga);
+				$this->load->view('include/header_1', $data);
+				$this->load->view('warga/detail_warga', $data);
+				$this->load->view('include/footer');
+			} else if ($user['role_id'] == 2) {
+				$data['judul'] = 'Detail Warga';
+				$data['query'] = $this->m_kas->getWarga();
+				$data['konten'] = 'lap_warga';
+				$data['user'] = $user;
+				$data['detailWarga'] = $this->m_kas->getWarga($idWarga);
+				$this->load->view('include/header_1', $data);
+				$this->load->view('warga/detail_warga', $data);
+				$this->load->view('include/footer');
+			} else {
+				$data['judul'] = 'Detail Warga';
+				$data['query'] = $this->m_kas->getWarga();
+				$data['konten'] = 'lap_warga';
+				$data['user'] = $user;
+				$data['detailWarga'] = $this->m_kas->getWarga($idWarga);
+				$this->load->view('include/header_warga', $data);
+				$this->load->view('warga/detail_warga', $data);
+				$this->load->view('include/footer');
+			}
+		}
 	}
 }
 

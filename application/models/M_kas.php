@@ -10,7 +10,7 @@ class M_kas extends CI_Model
 		if ($idKas) {
 			return $this->db->get('data_transaksi', ['idKas' => $idKas, 'status' => 'kas'])->row_array();
 		} else {
-			return $this->db->get('data_transaksi', ['status' => 'kas'])->result();
+			return $this->db->where('status', 'kas')->get('data_transaksi')->result();
 		}
 	}
 
@@ -60,7 +60,7 @@ class M_kas extends CI_Model
 		if ($idWarga) {
 			return $this->db->get('data_warga', ['idWarga' => $idWarga])->row_array();
 		} else {
-			return $this->db->get('data_warga')->result();
+			return $this->db->order_by('nama', 'ASC')->get('data_warga')->result();
 		}
 	}
 

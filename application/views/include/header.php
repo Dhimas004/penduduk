@@ -9,7 +9,7 @@
     <meta name="author" content="Hau Nguyen">
     <meta name="keywords" content="au theme template">
     <!-- Title Page-->
-    <title>KAS-RT | <?= $judul; ?></title>
+    <title>Kas & Sampah | <?= $judul; ?></title>
     <link rel="shortcut icon" type="image/png" href="<?= base_url(); ?>assets/favicon.png">
     <!-- Fontfaces CSS-->
     <link href="<?= base_url(); ?>assets/css/font-face.css" rel="stylesheet" media="all">
@@ -28,6 +28,12 @@
     <link href="<?= base_url(); ?>assets/vendor/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" media="all">
     <!-- Main CSS-->
     <link href="<?= base_url(); ?>assets/css/theme.css" rel="stylesheet" media="all">
+
+    <style>
+        .header__navbar .nav-item {
+            width: 13%;
+        }
+    </style>
 </head>
 
 <body class="animsition">
@@ -42,45 +48,54 @@
                         </a>
                     </div>
                     <div class="header__navbar">
-                        <ul class="list-unstyled">
-                            <li class="has-sub">
-                                <a href="<?= base_url('admin'); ?>">
-                                    <i class="fas fa-home"></i>Dashboard
-                                    <span class="bot-line"></span>
+                        <ul class="list-unstyled d-flex align-items-center">
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= base_url('admin'); ?>">
+                                    <i class="fas fa-home"></i> Dashboard
                                 </a>
                             </li>
-                            <li>
-                                <a href="<?= base_url('penduduk'); ?>">
-                                    <i class="fas fa-plus"></i>
-                                    <span class="bot-line"></span>Kas Masuk</a>
+
+                            <!-- Dropdown Kas -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="kasDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-money-bill-wave"></i> Kas
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="kasDropdown">
+                                    <a class="dropdown-item" href="<?= base_url('penduduk'); ?>">
+                                        <i class="fas fa-plus"></i> Kas Masuk
+                                    </a>
+                                    <a class="dropdown-item" href="<?= base_url('penduduk/kasKeluar'); ?>">
+                                        <i class="fas fa-minus"></i> Kas Keluar
+                                    </a>
+                                </div>
                             </li>
-                            <li>
-                                <a href="<?= base_url('penduduk/kasKeluar'); ?>">
-                                    <i class="fas fa-minus"></i>
-                                    <span class="bot-line"></span>Kas Keluar</a>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= base_url('warga'); ?>">
+                                    <i class="fas fa-check-square"></i> Warga
+                                </a>
                             </li>
-                            <li>
-                                <a href="<?= base_url('warga'); ?>">
-                                    <i class="fas fa-check-square"></i>
-                                    <span class="bot-line"></span>Warga</a>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= base_url('penduduk/laporan'); ?>">
+                                    <i class="fas fa-bar-chart-o"></i> Laporan
+                                </a>
                             </li>
-                            <li>
-                                <a href="<?= base_url('penduduk/laporan'); ?>">
-                                    <i class="fas fa-bar-chart-o"></i>
-                                    <span class="bot-line"></span>Laporan</a>
-                            </li>
-                            <li>
-                                <a href="<?= base_url('admin/user'); ?>">
-                                    <i class="fas fa-users"></i>
-                                    <span class="bot-line"></span>Akses</a>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= base_url('admin/user'); ?>">
+                                    <i class="fas fa-users"></i> Akses
+                                </a>
                             </li>
                         </ul>
                     </div>
+
+                    <!-- Akun -->
                     <div class="header__tool">
                         <div class="account-wrap">
                             <div class="account-item account-item--style2 clearfix js-item-menu">
                                 <div class="image">
-                                    <img src="<?= base_url('assets/profil/' . $user['img']); ?>" alt="John Doe" />
+                                    <img src="<?= base_url('assets/profil/' . $user['img']); ?>" alt="User" />
                                 </div>
                                 <div class="content">
                                     <a class="js-acc-btn" href="#"><?= $user['username']; ?></a>
@@ -89,17 +104,20 @@
                                     <div class="account-dropdown__body">
                                         <div class="account-dropdown__item">
                                             <a href="#!" onclick="changePassword('<?= base_url('admin/changePassword/' . $user['user_id']); ?>')">
-                                                <i class="zmdi zmdi-key"></i>Change Password</a>
+                                                <i class="zmdi zmdi-key"></i>Change Password
+                                            </a>
                                         </div>
                                     </div>
                                     <div class="account-dropdown__footer">
                                         <a href="<?= base_url('auth/logout'); ?>">
-                                            <i class="zmdi zmdi-power"></i>Logout</a>
+                                            <i class="zmdi zmdi-power"></i>Logout
+                                        </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </header>

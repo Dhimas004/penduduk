@@ -9,7 +9,7 @@
     <meta name="author" content="Hau Nguyen">
     <meta name="keywords" content="au theme template">
     <!-- Title Page-->
-    <title>SIK RT 002 - <?= $judul; ?></title>
+    <title>Kas & Sampah - <?= $judul; ?></title>
     <link rel="shortcut icon" type="image/png" href="<?= base_url(); ?>assets/favicon.png">
     <!-- Fontfaces CSS-->
     <link href="<?= base_url(); ?>assets/css/font-face.css" rel="stylesheet" media="all">

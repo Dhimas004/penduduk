@@ -19,43 +19,38 @@
                                         <tr>
                                             <th>Nomor</th>
                                             <th>Jenis</th>
+                                            <th>Nama Warga</th>
                                             <th>Tanggal</th>
                                             <th>Keterangan</th>
                                             <th>Jumlah</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach ($kas as $kas) { ?>
+                                        <?php
+                                        $saldo = 0;
+                                        foreach ($kas as $kas) { ?>
                                             <tr>
                                                 <td><?= $kas->idKas; ?></td>
                                                 <td><?= ucfirst($kas->jenis); ?></td>
+                                                <td><?= ($kas->idWarga ? ucwords(strtolower($namaWarga[$kas->idWarga])) : '')  ?></td>
                                                 <td><?= tgl_indo($kas->tanggal); ?></td>
                                                 <td><?= $kas->keterangan; ?></td>
                                                 <td align="right"><?php
                                                                     if ($kas->jenis == 'keluar') {
-                                                                        echo rupiah($kas->jumlah * -1);
+                                                                        echo "<span style='color:red'>" . rupiah($kas->jumlah * -1) . "</span>";
+                                                                        $saldo -= $kas->jumlah;
                                                                     } else {
-                                                                        echo rupiah($kas->jumlah);
+                                                                        echo "<span style='color:green'>" . rupiah($kas->jumlah) . "</span>";
+                                                                        $saldo += $kas->jumlah;
                                                                     }
                                                                     ?></td>
                                             </tr>
                                         <?php } ?>
                                     </tbody>
                                     <thead>
-                                        <?php
-                                        $sum_masuk = 0;
-                                        foreach ($masuk as $total_masuk) {
-                                            $sum_masuk += $total_masuk->total;
-                                        }
-                                        $sum_keluar = 0;
-                                        foreach ($keluar as $total_keluar) {
-                                            $sum_keluar += $total_keluar->total;
-                                        }
-                                        $saldo = $sum_masuk - $sum_keluar;
-                                        ?>
                                         <tr>
-                                            <th colspan="4" scope="col">TOTAL <small>(Saldo)</small></th>
-                                            <th scope="col">Rp <?= rupiah($saldo); ?></th>
+                                            <th colspan="5" scope="col">TOTAL <small>(Saldo)</small></th>
+                                            <th scope="col">Rp. <?= rupiah($saldo); ?></th>
                                         </tr>
                                     </thead>
                                 </table>

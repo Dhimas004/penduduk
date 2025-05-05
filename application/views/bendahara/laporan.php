@@ -6,7 +6,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="table-data__tool">
-                                <h3 class="title-5 m-b-35">laporan data kas</h3>
+                                <h3 class="title-5">laporan data kas</h3>
                                 <!-- <div class="table-data__tool-left">
 									<a class="au-btn-filter">
 											<i class="zmdi zmdi-filter"> from </i><input type="date"></a>
