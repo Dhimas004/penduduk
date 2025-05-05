@@ -2,7 +2,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class KasRT extends CI_Controller
+class Penduduk extends CI_Controller
 {
 	public function __construct()
 	{
@@ -154,7 +154,6 @@ class KasRT extends CI_Controller
 	{
 		$username = $this->session->userdata('username');
 		$user = $this->db->get_where('users', ['username' => $username])->row_array();
-
 		if ($username == '') {
 			redirect('auth');
 		} else {

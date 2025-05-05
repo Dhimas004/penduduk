@@ -24,10 +24,10 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `data_kas`
+-- Struktur dari tabel `data_transaksi`
 --
 
-CREATE TABLE `data_kas` (
+CREATE TABLE `data_transaksi` (
   `idKas` int(11) NOT NULL,
   `keterangan` varchar(100) NOT NULL,
   `tanggal` date NOT NULL,
@@ -36,10 +36,10 @@ CREATE TABLE `data_kas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `data_kas`
+-- Dumping data untuk tabel `data_transaksi`
 --
 
-INSERT INTO `data_kas` (`idKas`, `keterangan`, `tanggal`, `jumlah`, `jenis`) VALUES
+INSERT INTO `data_transaksi` (`idKas`, `keterangan`, `tanggal`, `jumlah`, `jenis`) VALUES
 (30000001, 'Beli Printer L5190', '2021-07-01', '3750000', 'keluar'),
 (30000002, 'Iuran warga mingguan', '2021-07-01', '5900000', 'masuk'),
 (30000003, 'iuran warga bulanan', '2021-07-03', '7800000', 'masuk'),
@@ -138,9 +138,9 @@ INSERT INTO `user_role` (`id`, `role`) VALUES
 --
 
 --
--- Indeks untuk tabel `data_kas`
+-- Indeks untuk tabel `data_transaksi`
 --
-ALTER TABLE `data_kas`
+ALTER TABLE `data_transaksi`
   ADD PRIMARY KEY (`idKas`);
 
 --
@@ -172,9 +172,9 @@ ALTER TABLE `user_role`
 --
 
 --
--- AUTO_INCREMENT untuk tabel `data_kas`
+-- AUTO_INCREMENT untuk tabel `data_transaksi`
 --
-ALTER TABLE `data_kas`
+ALTER TABLE `data_transaksi`
   MODIFY `idKas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30000007;
 
 --
