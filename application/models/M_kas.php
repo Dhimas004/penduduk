@@ -5,19 +5,51 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class M_kas extends CI_Model
 {
 
-	public function getKas($idKas = '')
+	public function getKas($params = [])
+	{
+		// Tambahkan filter status jika ada
+		if (!empty($params['status'])) {
+			$this->db->where('status', $params['status']);
+		}
+
+		// Jika idKas diset, ambil satu baris saja
+		if (!empty($params['idKas'])) {
+			$this->db->where('idKas', $params['idKas']);
+			return $this->db->get('data_transaksi')->row_array();
+		}
+
+		// Urutan hasil jika diset
+		if (!empty($params['order_by'])) {
+			$this->db->order_by($params['order_by'], $params['order_dir'] ?? 'ASC');
+		}
+
+		// Batas hasil jika diset
+		if (!empty($params['limit'])) {
+			$this->db->limit($params['limit'], $params['offset'] ?? 0);
+		}
+
+		return $this->db->get('data_transaksi')->result();
+	}
+
+	public function getSampah($idKas = '')
 	{
 		if ($idKas) {
 			return $this->db->get('data_transaksi', ['idKas' => $idKas, 'status' => 'kas'])->row_array();
 		} else {
-			return $this->db->where('status', 'kas')->get('data_transaksi')->result();
+			return $this->db->where('status', 'sampah')->get('data_transaksi')->result();
 		}
 	}
 
 	public function cekNomor()
 	{
-		$idKas = $this->db->query('SELECT MAX(idKas) AS id_kas FROM data_transaksi')->row();
+		$idKas = $this->db->query("SELECT MAX(idKas) AS id_kas FROM data_transaksi WHERE `status` = 'kas'")->row();
 		return $idKas->id_kas;
+	}
+
+	public function cekNomorSampah()
+	{
+		$idSampah = $this->db->query("SELECT MAX(idKas) AS id_sampah FROM data_transaksi WHERE `status` = 'sampah'")->row();
+		return $idSampah->id_sampah;
 	}
 
 	public function saveKas($data)

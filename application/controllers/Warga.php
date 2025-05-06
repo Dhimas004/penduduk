@@ -98,7 +98,12 @@ class Warga extends CI_Controller
 		$this->m_kas->updateWarga($data, $idWarga);
 
 		$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil ditambahkan!</div>');
-		redirect('warga');
+		$url = $this->input->post('url');
+		if (isset($url) && $url == 'ubahDataDiri') {
+			redirect('warga/ubahDataDiri');
+		} else {
+			redirect('warga');
+		}
 	}
 
 	public function delWarga($idWarga)
@@ -114,6 +119,31 @@ class Warga extends CI_Controller
 		$data['query'] = $this->m_kas->getWarga();
 		$data['konten'] = 'lap_warga';
 		$this->load->view('laporan/lap_warga', $data);
+	}
+
+	public function ubahDataDiri()
+	{
+		$username = $this->session->userdata('username');
+		$user = $this->db->get_where('users', ['username' => $username])->row_array();
+		$data['user'] = $user;
+		$data['dataWarga'] = [];
+		if ($user['idWarga'] != '0') $data['dataWarga'] = $this->m_kas->getWarga($user['idWarga']);
+		if ($username == '') {
+			redirect('auth');
+		} else {
+			if ($user['role_id'] == 1) {
+				$data['judul'] = 'Ubah Data Diri';
+				$data['user'] = $user;
+				$this->load->view('include/header', $data);
+				$this->load->view('warga/ubah_data_diri', $data);
+				$this->load->view('include/footer');
+			} else {
+				$data['judul'] = 'Ubah Data Diri';
+				$this->load->view('include/header_warga', $data);
+				$this->load->view('warga/ubah_data_diri', $data);
+				$this->load->view('include/footer');
+			}
+		}
 	}
 
 	public function detailWarga($idWarga)

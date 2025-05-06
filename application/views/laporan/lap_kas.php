@@ -35,61 +35,53 @@
 		<table>
 			<tr>
 				<td>
-					<img src="<?= base_url(); ?>assets/icon-home.png" style="width: 100px; height: 50px;">
-				</td>
-				<td>
 					<center>
-						<h3>KAS RT</h3>
-						<h5>Jl Raya Jakarta.</h5>
-						<h5>Kota Administrasi, Jakarta Utara – Indonesia</h5>
+						<h3>Laporan</h3>
+						<h5>Jl. Duta Asri Ciakar</h5>
+						<h5>Kabupaten Tangerang, Banten – Indonesia</h5>
 					</center>
 				</td>
 			</tr>
 		</table>
-		<h4>LAPORAN DATA KAS RT 002</h4>
+		<h4>Pemasukan dan Pengeluaran</h4>
 	</center>
 	<hr>
 	<table class="table table-bordered">
 		<thead>
 			<tr>
-				<th>No.</th>
-				<th>nomor</th>
-				<th>keterangan</th>
-				<th>tanggal</th>
-				<th>jenis</th>
-				<th>jumlah</th>
+				<th>No</th>
+				<th>Nomor</th>
+				<th>Jenis</th>
+				<th>Nama Warga</th>
+				<th>Tanggal</th>
+				<th>Keterangan</th>
+				<th style="text-align: right;">Jumlah</th>
 			</tr>
 		</thead>
 		<tbody>
 			<?php
 			$no = 1;
+			$total = 0;
 			foreach ($kas as $kas) {
 			?>
 				<tr>
-					<td><?= $no++; ?></td>
+					<td align="center"><?= $no++; ?></td>
 					<td><?= $kas->idKas; ?></td>
+					<td><?= ucfirst($kas->jenis); ?></td>
+					<td><?= ($kas->idWarga != 0 ? ucwords(strtolower($namaWarga[$kas->idWarga])) : ''); ?></td>
+					<td><?= tgl_indo($kas->tanggal); ?></td>
 					<td><?= $kas->keterangan; ?></td>
-					<td><?= date('d-m-Y', strtotime($kas->tanggal)); ?></td>
-					<td><?= $kas->jenis; ?></td>
-					<td class="process">Rp <?= rupiah($kas->jumlah); ?></td>
+					<td align="right"><?= ($kas->jenis == 'keluar' ? '-' : '') . rupiah($kas->jumlah); ?></td>
 				</tr>
-			<?php } ?>
+			<?php
+				if ($kas->jenis == 'masuk') $total += $kas->jumlah;
+				else if ($kas->jenis == 'keluar') $total += $kas->jumlah * -1;
+			} ?>
 		</tbody>
 		<thead>
-			<?php
-			$sum_masuk = 0;
-			foreach ($masuk as $total_masuk) {
-				$sum_masuk += $total_masuk->total;
-			}
-			$sum_keluar = 0;
-			foreach ($keluar as $total_keluar) {
-				$sum_keluar += $total_keluar->total;
-			}
-			$saldo = $sum_masuk - $sum_keluar;
-			?>
 			<tr>
-				<th colspan="5" scope="col">TOTAL <small>(Saldo)</small></th>
-				<th scope="col">Rp <?= rupiah($saldo); ?></th>
+				<th colspan="6" scope="col">Total</th>
+				<th scope="col" style="text-align: right;"><?= rupiah($total); ?></th>
 			</tr>
 		</thead>
 	</table>

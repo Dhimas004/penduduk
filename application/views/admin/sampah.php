@@ -7,11 +7,11 @@
         				<div class="col-md-12">
         					<div class="table-data__tool">
         						<div class="table-data__tool-left">
-        							<h3 class="title-5">data kas Masuk</h3>
+        							<h3 class="title-5">Data Sampah</h3>
         						</div>
         						<div class="table-data__tool-right">
-        							<button class="au-btn au-btn-icon au-btn--green au-btn--small" data-toggle="modal" data-target="#addKasMasukModal">
-        								<i class="zmdi zmdi-plus"></i>pemasukan</button>
+        							<button class="au-btn au-btn-icon au-btn--green au-btn--small" data-toggle="modal" data-target="#addPembayaranSampahModal">
+        								<i class="zmdi zmdi-plus"></i>Pembayaran</button>
         						</div>
         					</div>
         					<!-- DATA TABLE-->
@@ -21,41 +21,37 @@
         								<tr>
         									<th>Nomor</th>
         									<th>Nama Warga</th>
-        									<th>Keterangan</th>
-        									<th>Tanggal</th>
+        									<th>Tanggal Pembayaran</th>
         									<th>Jumlah</th>
         									<th>Aksi</th>
         								</tr>
         							</thead>
         							<tbody>
-        								<?php
-										$total = 0;
-										foreach ($masuk as $msk) { ?>
+        								<?php $total = 0;
+										foreach ($sampah as $s): ?>
         									<tr>
-        										<td><?= $msk->idKas; ?></td>
-        										<td><?= ($msk->idWarga != 0 ? $namaWarga[$msk->idWarga] : ''); ?></td>
-        										<td><?= $msk->keterangan; ?></td>
-        										<td><?= date('d-m-Y', strtotime($msk->tanggal)); ?></td>
-        										<td><?= rupiah($msk->jumlah); ?></td>
+        										<td><?= $s->idKas; ?></td>
+        										<td><?= $namaWarga[$s->idWarga]; ?></td>
+        										<td><?= tgl_indo($s->tanggal); ?></td>
+        										<td><?= rupiah($s->jumlah); ?></td>
         										<td>
         											<div class="table-data-feature">
-        												<button class="item" data-toggle="modal" data-target="#editKasModal<?= $msk->idKas; ?>" data-placement="top" title="Edit">
+        												<button class="item" data-toggle="modal" data-target="#editPembayaranSampahModal<?= $s->idKas; ?>" data-placement="top" title="Edit">
         													<i class="zmdi zmdi-edit"></i>
         												</button>
         												<button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
-        													<a href="#!" onclick="deleteConfirm('<?= base_url('penduduk/delkas/' . $msk->idKas); ?>')">
+        													<a href="#!" onclick="deleteConfirm('<?= base_url('penduduk/delkas/' . $s->idKas); ?>')">
         														<i class="zmdi zmdi-delete" style="color:red"></i>
         												</button>
         											</div>
         										</td>
         									</tr>
-        								<?php
-											$total += $msk->jumlah;
-										} ?>
+        								<?php $total += $s->jumlah;
+										endforeach; ?>
         							</tbody>
         							<thead>
         								<tr>
-        									<th colspan="4" scope="col">Total</th>
+        									<th colspan="3" scope="col">Total</th>
         									<th scope="col"><?= rupiah($total); ?></th>
         									<th scope="col">&nbsp;</th>
         								</tr>
@@ -70,19 +66,19 @@
         	<!-- END DATA TABLE-->
 
         	<!-- modal addKasMasuk -->
-        	<div class="modal fade" id="addKasMasukModal" tabindex="-1" role="dialog" aria-labelledby="addKasMasukModal" aria-hidden="true">
+        	<div class="modal fade" id="addPembayaranSampahModal" tabindex="-1" role="dialog" aria-labelledby="addPembayaranSampahModal" aria-hidden="true">
         		<div class="modal-dialog modal-dialog-centered" role="document">
         			<div class="modal-content">
         				<div class="modal-header">
-        					<h4 class="modal-title" id="addKasMasukModal">Tambah Kas Masuk</h4>
+        					<h4 class="modal-title" id="addPembayaranSampahModal">Tambah Pembayaran Sampah</h4>
         					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         				</div>
         				<div class="modal-body">
         					<div class="login-form">
-        						<form action="<?= base_url('penduduk/addKas'); ?>" method="post">
+        						<form action="<?= base_url('penduduk/addPembayaranSampah'); ?>" method="post">
         							<div class="form-group">
         								<label>Nomor</label>
-        								<input class="form-control" type="text" name="id_kas" id="id_kas" value="3000<?= sprintf("%04s", $idKas); ?>" readonly>
+        								<input class="form-control" type="text" name="id_kas" id="id_kas" value="4000<?= sprintf("%04s", $idSampah); ?>" readonly>
         							</div>
         							<div class="form-group">
         								<label>Nama Warga</label>
@@ -96,21 +92,15 @@
         								</select>
         							</div>
         							<div class="form-group">
-        								<label>Keterangan</label>
-        								<textarea class="form-control" type="text" name="keterangan" id="keterangan" placeholder="Keterangan" value="<?= set_value('keterangan'); ?>" required></textarea>
-        							</div>
-        							<div class="form-group">
-        								<label>Tanggal</label>
+        								<label>Tanggal Pembayaran</label>
         								<input class="form-control" type="date" name="tanggal" id="tanggal" value="<?= set_value('tanggal'); ?>" required>
         							</div>
         							<div class="form-group">
         								<label>Jumlah</label>
-        								<input class="form-control" type="number" name="jumlah" id="jumlah" placeholder="Jumlah Kas Masuk" value="<?= set_value('jumlah'); ?>" required>
+        								<input class="form-control" type="number" name="jumlah" id="jumlah" placeholder="Jumlah Pembayaran Sampah" value="<?= set_value('jumlah'); ?>" required>
         							</div>
-        							<div class="form-group" hidden>
-        								<label>Jenis</label>
-        								<input class="form-control" type="text" name="jenis" id="jenis" value="masuk" required>
-        							</div>
+        							<input class="form-control" type="hidden" name="jenis" id="jenis" value="masuk" required>
+        							<input class="form-control" type="hidden" name="status" id="status" value="sampah" required>
         							<div class="modal-footer">
         								<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
         								<button type="submit" class="btn btn-primary">Confirm</button>
@@ -123,50 +113,42 @@
         	</div>
         	<!-- end modal addKasMasuk -->
 
-        	<!-- modal editKasModal -->
+        	<!-- modal editPembayaranSampahModal -->
         	<?php $no = 0;
-			foreach ($masuk as $val): $no++; ?>
-        		<div class="modal fade" id="editKasModal<?= $val->idKas; ?>" tabindex="-1" role="dialog" aria-labelledby="editKasModal" aria-hidden="true">
+			foreach ($sampah as $s): $no++; ?>
+        		<div class="modal fade" id="editPembayaranSampahModal<?= $s->idKas; ?>" tabindex="-1" role="dialog" aria-labelledby="editPembayaranSampahModal" aria-hidden="true">
         			<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
         				<div class="modal-content">
         					<div class="modal-header">
-        						<h4 class="modal-title" id="editKasModal">Edit Kas Masuk</h4>
+        						<h4 class="modal-title" id="editPembayaranSampahModal">Edit Pembayaran Sampah</h4>
         						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         					</div>
         					<div class="modal-body">
         						<div class="login-form">
-        							<?= form_open_multipart('penduduk/editkas'); ?>
-        							<input type="hidden" name="idKas" id="idKas" value="<?= $val->idKas; ?>">
+        							<?= form_open_multipart('penduduk/editPembayaranSampah'); ?>
+        							<input type="hidden" name="idKas" id="idKas" value="<?= $s->idKas; ?>">
         							<div class="form-group">
         								<label>Nomor</label>
-        								<input class="form-control" type="text" name="id_kas" id="id_kas" value="<?= $val->idKas; ?>" readonly>
+        								<input class="form-control" type="text" name="id_kas" id="id_kas" value="<?= $s->idKas; ?>" readonly>
         							</div>
         							<div class="form-group">
         								<label>Nama Warga</label>
-        								<select class="form-control" name="idWarga" id="idWarga" value="<?= $val->idWarga; ?>">
+        								<select class="form-control" name="idWarga" id="idWarga" value="<?= $s->idWarga; ?>">
         									<option value="">Pilih ...</option>
         									<?php
 											foreach ($warga as $w) {
-												echo "<option value='" . $w->idWarga . "' " . ($w->idWarga == $val->idWarga ? 'selected' : '') . ">" . ucwords(strtolower($w->nama)) . "</option>";
+												echo "<option value='" . $w->idWarga . "' " . ($w->idWarga == $s->idWarga ? 'selected' : '') . ">" . ucwords(strtolower($w->nama)) . "</option>";
 											}
 											?>
         								</select>
         							</div>
         							<div class="form-group">
-        								<label>Keterangan</label>
-        								<textarea class="form-control" type="text" name="keterangan" id="keterangan" placeholder="Keterangan" required><?= $val->keterangan; ?></textarea>
-        							</div>
-        							<div class="form-group">
-        								<label>Tanggal</label>
-        								<input class="form-control" type="date" name="tanggal" id="tanggal" value="<?= $val->tanggal; ?>">
+        								<label>Tanggal Pembayaran</label>
+        								<input class="form-control" type="date" name="tanggal" id="tanggal" value="<?= $s->tanggal; ?>">
         							</div>
         							<div class="form-group">
         								<label>Jumlah</label>
-        								<input class="form-control" type="number" name="jumlah" id="jumlah" value="<?= $val->jumlah; ?>">
-        							</div>
-        							<div class="form-group" hidden>
-        								<label>Jenis</label>
-        								<input class="form-control" type="text" name="jenis" id="jenis" value="<?= $val->jenis; ?>" readonly>
+        								<input class="form-control" type="number" name="jumlah" id="jumlah" value="<?= $s->jumlah; ?>">
         							</div>
 
         							<div class="modal-footer">
@@ -180,4 +162,4 @@
         			</div>
         		</div>
         	<?php endforeach; ?>
-        	<!-- end modal editKasModal -->
+        	<!-- end modal editPembayaranSampahModal -->

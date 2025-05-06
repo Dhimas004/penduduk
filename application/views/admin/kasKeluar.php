@@ -27,12 +27,14 @@
         								</tr>
         							</thead>
         							<tbody>
-        								<?php foreach ($keluar as $kel) { ?>
+        								<?php
+										$total = 0;
+										foreach ($keluar as $kel) { ?>
         									<tr>
         										<td><?= $kel->idKas; ?></td>
         										<td><?= $kel->keterangan; ?></td>
-        										<td><?= date('d-m-Y', strtotime($kel->tanggal)); ?></td>
-        										<td class="process">Rp <?= rupiah($kel->jumlah); ?></td>
+        										<td><?= tgl_indo($kel->tanggal); ?></td>
+        										<td><?= rupiah($kel->jumlah); ?></td>
         										<td>
         											<div class="table-data-feature">
         												<button class="item" data-toggle="modal" data-target="#editKasModal<?= $kel->idKas; ?> " data-placement="top" title="Edit">
@@ -45,18 +47,14 @@
         											</div>
         										</td>
         									</tr>
-        								<?php } ?>
+        								<?php
+											$total += $kel->jumlah;
+										} ?>
         							</tbody>
         							<thead>
-        								<?php
-										$sum = 0;
-										foreach ($ttl as $total) {
-											$sum += $total->total;
-										}
-										?>
         								<tr>
-        									<th colspan="3" scope="col">TOTAL <small>(Keluaran)</small></th>
-        									<th scope="col">Rp <?= rupiah($sum); ?></th>
+        									<th colspan="3" scope="col">Total</th>
+        									<th scope="col"><?= rupiah($total); ?></th>
         									<th scope="col">&nbsp;</th>
         								</tr>
         							</thead>

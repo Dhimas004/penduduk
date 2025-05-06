@@ -85,7 +85,8 @@ class Auth extends CI_Controller
 				'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
 				'img' => 'avatar.png',
 				'role_id' => 4,
-				'is_active' => 1
+				'is_active' => 1,
+				'idWarga' => htmlspecialchars($this->input->post('idWarga', TRUE))
 			];
 			$this->m_auth->save($data);
 			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Congratulation account created successfully!</div>');
@@ -124,7 +125,8 @@ class Auth extends CI_Controller
 				'username' => htmlspecialchars($this->input->post('username', TRUE)),
 				'role_id' => htmlspecialchars($this->input->post('role_id', TRUE)),
 				'is_active' => htmlspecialchars($this->input->post('is_active', TRUE)),
-				'email' => htmlspecialchars($this->input->post('email', TRUE))
+				'email' => htmlspecialchars($this->input->post('email', TRUE)),
+				'idWarga' => htmlspecialchars($this->input->post('idWarga', TRUE))
 			];
 			$id = $this->input->post('user_id');
 			$this->m_auth->update($data, $id);

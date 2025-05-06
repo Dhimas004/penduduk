@@ -9,7 +9,7 @@
     <meta name="author" content="Hau Nguyen">
     <meta name="keywords" content="au theme template">
     <!-- Title Page-->
-    <title>Kas & Sampah - <?= $judul; ?></title>
+    <title>Kas & Sampah | <?= $judul; ?></title>
     <link rel="shortcut icon" type="image/png" href="<?= base_url(); ?>assets/favicon.png">
     <!-- Fontfaces CSS-->
     <link href="<?= base_url(); ?>assets/css/font-face.css" rel="stylesheet" media="all">
@@ -28,64 +28,74 @@
     <link href="<?= base_url(); ?>assets/vendor/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" media="all">
     <!-- Main CSS-->
     <link href="<?= base_url(); ?>assets/css/theme.css" rel="stylesheet" media="all">
+
+    <style>
+        .header__navbar .nav-item {
+            width: 13%;
+        }
+    </style>
 </head>
 
 <body class="animsition">
     <div class="page-wrapper">
-        <!-- HEADER DESKTOP-->
-        <header class="header-desktop3 d-none d-lg-block">
-            <div class="section__content section__content--p35">
-                <div class="header3-wrap">
-                    <div class="header__logo">
-                        <a href="<?= base_url('admin'); ?>">
-                            <img src="<?= base_url(); ?>assets/icon-home.png" width="50%" alt="E-KasRT" />
-                        </a>
-                    </div>
-                    <div class="header__navbar">
-                        <ul class="list-unstyled">
-                            <li class="has-sub">
-                                <a href="<?= base_url('admin'); ?>">
-                                    <i class="fas fa-home"></i>Dashboard
-                                    <span class="bot-line"></span>
+        <!-- HEADER -->
+        <header class="d-block">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: #393939 !important;">
+                <a class="navbar-brand" href="<?= base_url('admin'); ?>">
+                    <img src="<?= base_url(); ?>assets/icon-home.png" width="30" alt="E-KasRT">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavbar"
+                    aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navbar content -->
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item mr-3">
+                            <a class="nav-link text-white" href="<?= base_url('admin'); ?>">
+                                <i class="fas fa-home"></i> Dashboard
+                            </a>
+                        </li>
+
+                        <li class="nav-item  mr-3">
+                            <a class="nav-link text-white" href="<?= base_url('warga'); ?>">
+                                <i class="fas fa-check-square"></i> Warga
+                            </a>
+                        </li>
+
+                        <li class="nav-item  mr-3">
+                            <a class="nav-link text-white" href="<?= base_url('penduduk/laporan'); ?>">
+                                <i class="fas fa-bar-chart-o"></i> Laporan
+                            </a>
+                        </li>
+
+                        <li class="nav-item  mr-3">
+                            <a class="nav-link text-white" href="<?= base_url('warga/ubahDataDiri'); ?>">
+                                <i class="fas fa-user"></i> Ubah Data Diri
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- Akun dropdown -->
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item  mr-3 dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center text-white" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img src="<?= base_url('assets/profil/' . $user['img']); ?>" width="30" class="rounded-circle mr-2" alt="User">
+                                <?= $user['username']; ?>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown" style="background-color: #393939 !important;">
+                                <a class="dropdown-item text-white" href="#!" onclick="changePassword('<?= base_url('admin/changePassword/' . $user['user_id']); ?>')">
+                                    <i class="zmdi zmdi-key"></i> Change Password
                                 </a>
-                            </li>
-                            <li>
-                                <a href="<?= base_url('warga'); ?>">
-                                    <i class="fas fa-check-square"></i>
-                                    <span class="bot-line"></span>Warga</a>
-                            </li>
-                            <li>
-                                <a href="<?= base_url('penduduk/laporan'); ?>">
-                                    <i class="fas fa-bar-chart-o"></i>
-                                    <span class="bot-line"></span>Laporan</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="header__tool">
-                        <div class="account-wrap">
-                            <div class="account-item account-item--style2 clearfix js-item-menu">
-                                <div class="image">
-                                    <img src="<?= base_url('assets/profil/' . $user['img']); ?>" alt="John Doe" />
-                                </div>
-                                <div class="content">
-                                    <a class="js-acc-btn" href="#"><?= $user['username']; ?></a>
-                                </div>
-                                <div class="account-dropdown js-dropdown">
-                                    <div class="account-dropdown__body">
-                                        <div class="account-dropdown__item">
-                                            <a href="#!" onclick="changePassword('<?= base_url('admin/changePassword/' . $user['user_id']); ?>')">
-                                                <i class="zmdi zmdi-key"></i>Change Password</a>
-                                        </div>
-                                    </div>
-                                    <div class="account-dropdown__footer">
-                                        <a href="<?= base_url('auth/logout'); ?>">
-                                            <i class="zmdi zmdi-power"></i>Logout</a>
-                                    </div>
-                                </div>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-white" href="<?= base_url('auth/logout'); ?>">
+                                    <i class="zmdi zmdi-power"></i> Logout
+                                </a>
                             </div>
-                        </div>
-                    </div>
+                        </li>
+                    </ul>
                 </div>
-            </div>
+            </nav>
         </header>
-        <!-- END HEADER DESKTOP-->
+        <!-- END HEADER -->

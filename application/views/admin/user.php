@@ -25,6 +25,7 @@
 											<th>is_active</th>
 											<th>role</th>
 											<th>email</th>
+											<th>id warga</th>
 											<th>aksi</th>
 										</tr>
 									</thead>
@@ -37,6 +38,7 @@
 												<td class="process"><?= $val->is_active; ?></td>
 												<td class="process"><?= $val->role; ?></td>
 												<td><?= $val->email; ?></td>
+												<td><?= ($val->idWarga != 0 ? ucwords(strtolower($namaWarga[$val->idWarga])) : ''); ?></td>
 												<td>
 													<div class="table-data-feature">
 														<button class="item" data-toggle="modal" data-target="#editUserModal<?= $val->user_id; ?>" title="Edit">
@@ -92,6 +94,17 @@
 										<label>Kofirmasi Password</label>
 										<input class="form-control" type="password" name="password1" id="password1" placeholder="Kofirmasi Password" required>
 										<?= form_error('password1', '<small class="text-danger pl-3">', '</small>'); ?>
+									</div>
+									<div class="form-group">
+										<label>Nama Warga</label>
+										<select class="form-control" name="idWarga" id="idWarga" value="<?= set_value('idWarga'); ?>">
+											<option>Pilih ...</option>
+											<?php
+											foreach ($warga as $w) {
+												echo "<option value='" . $w->idWarga . "'>" . ucwords(strtolower($w->nama)) . "</option>";
+											}
+											?>
+										</select>
 									</div>
 									<div class="modal-footer">
 										<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -155,6 +168,17 @@
 											<option value="<?= $val->is_active; ?>"><?= $val->is_active; ?></option>
 											<option value="1">1 : Active</option>
 											<option value="0">0 : Not Active</option>
+										</select>
+									</div>
+									<div class="form-group">
+										<label>Nama Warga</label>
+										<select class="form-control" name="idWarga" id="idWarga" value="<?= set_value('idWarga'); ?>">
+											<option value="">Pilih ...</option>
+											<?php
+											foreach ($warga as $w) {
+												echo "<option value='" . $w->idWarga . "' " . ($w->idWarga == $val->idWarga ? 'selected' : '') . ">" . ucwords(strtolower($w->nama)) . "</option>";
+											}
+											?>
 										</select>
 									</div>
 

@@ -38,6 +38,10 @@ class Admin extends CI_Controller
 	{
 		$username = $this->session->userdata('username');
 		$user = $this->db->get_where('users', ['username' => $username])->row_array();
+		$data['namaWarga'] = []; // Array untuk menyimpan nama warga
+		foreach ($this->m_kas->getWarga() as $w) {
+			$data['namaWarga'][$w->idWarga] = ucwords(strtolower($w->nama));
+		}
 		if ($username == '') {
 			redirect('auth');
 		} else {
@@ -47,6 +51,7 @@ class Admin extends CI_Controller
 				$data['user'] = $user;
 				$data['auth'] = $this->m_auth->getUser();
 				$data['role'] = $this->db->get('user_role')->result();
+				$data['warga'] = $this->m_kas->getWarga();
 				$this->load->view('include/header', $data);
 				$this->load->view('admin/user', $data);
 				$this->load->view('include/footer');

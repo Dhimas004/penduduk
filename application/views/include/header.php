@@ -33,13 +33,6 @@
         .header__navbar .nav-item {
             width: 13%;
         }
-
-        @media (min-width: 768px) {
-            .navbar-nav {
-                margin-left: 26% !important;
-                /* Menambahkan margin kiri pada layar lebih besar dari mobile */
-            }
-        }
     </style>
 </head>
 
@@ -59,16 +52,16 @@
                 <!-- Navbar content -->
                 <div class="collapse navbar-collapse" id="mainNavbar">
                     <ul class="navbar-nav mx-auto">
-                        <li class="nav-item">
+                        <li class="nav-item mr-3">
                             <a class="nav-link text-white" href="<?= base_url('admin'); ?>">
                                 <i class="fas fa-home"></i> Dashboard
                             </a>
                         </li>
 
                         <!-- Dropdown Kas -->
-                        <li class="nav-item dropdown">
+                        <li class="nav-item  mr-3 dropdown">
                             <a class="nav-link dropdown-toggle text-white" href="#" id="kasDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-money-bill-wave"></i> Kas
+                                <i class="fas fa-credit-card"></i></i> Transaksi
                             </a>
                             <div class="dropdown-menu" aria-labelledby="kasDropdown" style="background-color: #393939 !important;">
                                 <a class="dropdown-item text-white" href="<?= base_url('penduduk'); ?>">
@@ -77,31 +70,49 @@
                                 <a class="dropdown-item text-white" href="<?= base_url('penduduk/kasKeluar'); ?>">
                                     <i class="fas fa-minus"></i> Kas Keluar
                                 </a>
+                                <a class="dropdown-item text-white" href="<?= base_url('penduduk/sampah'); ?>">
+                                    <i class="fas fa-plus"></i> Pembayaran Sampah
+                                </a>
                             </div>
                         </li>
 
-                        <li class="nav-item">
+                        <li class="nav-item  mr-3">
                             <a class="nav-link text-white" href="<?= base_url('warga'); ?>">
                                 <i class="fas fa-check-square"></i> Warga
                             </a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="<?= base_url('penduduk/laporan'); ?>">
-                                <i class="fas fa-bar-chart-o"></i> Laporan
+                        <li class="nav-item  mr-3 dropdown">
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="laporanDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-bar-chart-o"></i></i> Laporan
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="laporanDropdown" style="background-color: #393939 !important;">
+                                <a class="dropdown-item text-white" href="<?= base_url('penduduk/laporan'); ?>">
+                                    Laporan Kas
+                                </a>
+                                <a class="dropdown-item text-white" href="<?= base_url('penduduk/laporanSampah'); ?>">
+                                    Laporan Sampah
+                                </a>
+                            </div>
+                        </li>
+
+                        <li class="nav-item  mr-3">
+                            <a class="nav-link text-white" href="<?= base_url('admin/user'); ?>">
+                                <i class="fas fa-users"></i> Akses
                             </a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="<?= base_url('admin/user'); ?>">
-                                <i class="fas fa-users"></i> Akses
+
+                        <li class="nav-item  mr-3">
+                            <a class="nav-link text-white" href="<?= base_url('warga/ubahDataDiri'); ?>">
+                                <i class="fas fa-user"></i> Ubah Data Diri
                             </a>
                         </li>
                     </ul>
 
                     <!-- Akun dropdown -->
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item dropdown">
+                        <li class="nav-item  mr-3 dropdown">
                             <a class="nav-link dropdown-toggle d-flex align-items-center text-white" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <img src="<?= base_url('assets/profil/' . $user['img']); ?>" width="30" class="rounded-circle mr-2" alt="User">
                                 <?= $user['username']; ?>

@@ -61,6 +61,66 @@ class Penduduk extends CI_Controller
 		}
 	}
 
+	public function sampah()
+	{
+		$username = $this->session->userdata('username');
+		$user = $this->db->get_where('users', ['username' => $username])->row_array();
+		$cekId = $this->m_kas->cekNomorSampah();
+		$getId = substr($cekId, 4, 4);
+		$idNow = $getId + 1;
+		$data = array('idSampah' => $idNow);
+		$data['namaWarga'] = []; // Array untuk menyimpan nama warga
+		foreach ($this->m_kas->getWarga() as $w) {
+			$data['namaWarga'][$w->idWarga] = ucwords(strtolower($w->nama));
+		}
+
+		if ($username == '') {
+			redirect('auth');
+		} else {
+			if ($user['role_id'] == 1) {
+				$data['menu'] = 'Kas Masuk';
+				$data['judul'] = 'Kas Masuk';
+				$data['user'] = $user;
+				$data['sampah'] = $this->m_kas->getSampah();
+				$data['warga'] = $this->m_kas->getWarga();
+				$this->load->view('include/header', $data);
+				$this->load->view('admin/sampah', $data);
+				$this->load->view('include/footer');
+			}
+		}
+	}
+
+	public function addPembayaranSampah()
+	{
+		$this->m_kas->cekNomor();
+		$data = [
+			'idKas' => $this->input->post('id_kas'),
+			'tanggal' => $this->input->post('tanggal'),
+			'jumlah' => $this->input->post('jumlah'),
+			'status' => $this->input->post('status'),
+			'keterangan' => 'Pembayaran Sampah',
+			'jenis' => 'masuk',
+			'idWarga' => $this->input->post('idWarga'),
+		];
+		$this->m_kas->saveKas($data);
+		$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil ditambahkan!</div>');
+		redirect('penduduk/sampah');
+	}
+
+	public function editPembayaranSampah()
+	{
+		$idKas = $this->input->post('idKas');
+		$data = [
+			'tanggal' => $this->input->post('tanggal'),
+			'jumlah' => $this->input->post('jumlah'),
+			'idWarga' => $this->input->post('idWarga'),
+			'jenis' => 'masuk',
+		];
+		$this->m_kas->updateKas($data, $idKas);
+		$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil diupdate!</div>');
+		redirect('penduduk/sampah');
+	}
+
 	public function kasKeluar()
 	{
 		$username = $this->session->userdata('username');
@@ -175,31 +235,15 @@ class Penduduk extends CI_Controller
 				$data['user'] = $user;
 				$data['debit'] = $this->m_kas->getKasMasuk();
 				$data['kredit'] = $this->m_kas->getKasKeluar();
-				$data['kas'] = $this->m_kas->getKas();
+				$data['kas'] = $this->m_kas->getKas([
+					'order_by' => 'tanggal',
+					'order_dir' => 'DESC',
+					'status' => 'kas'
+				]);
 				$data['masuk'] = $this->m_kas->TotalMasuk();
 				$data['keluar'] = $this->m_kas->TotalKeluar();
 				$this->load->view('include/header', $data);
 				$this->load->view('admin/laporan', $data);
-				$this->load->view('include/footer');
-			} else if ($user['role_id'] == 3) {
-				$data['menu'] = 'Laporan';
-				$data['judul'] = 'Laporan';
-				$data['user'] = $user;
-				$data['kas'] = $this->m_kas->getKas();
-				$data['masuk'] = $this->m_kas->TotalMasuk();
-				$data['keluar'] = $this->m_kas->TotalKeluar();
-				$this->load->view('include/header_1', $data);
-				$this->load->view('bendahara/laporan', $data);
-				$this->load->view('include/footer');
-			} else if ($user['role_id'] == 2) {
-				$data['menu'] = 'Laporan';
-				$data['judul'] = 'Laporan';
-				$data['user'] = $user;
-				$data['kas'] = $this->m_kas->getKas();
-				$data['masuk'] = $this->m_kas->TotalMasuk();
-				$data['keluar'] = $this->m_kas->TotalKeluar();
-				$this->load->view('include/header_1', $data);
-				$this->load->view('rt/laporan', $data);
 				$this->load->view('include/footer');
 			} else {
 				$data['menu'] = 'Laporan';
@@ -215,13 +259,79 @@ class Penduduk extends CI_Controller
 		}
 	}
 
+	public function laporanSampah()
+	{
+		$username = $this->session->userdata('username');
+		$user = $this->db->get_where('users', ['username' => $username])->row_array();
+		$data['namaWarga'] = []; // Array untuk menyimpan nama warga
+		foreach ($this->m_kas->getWarga() as $w) {
+			$data['namaWarga'][$w->idWarga] = ucwords(strtolower($w->nama));
+		}
+		if ($username == '') {
+			redirect('auth');
+		} else {
+			if ($user['role_id'] == 1) {
+				$data['menu'] = 'Laporan';
+				$data['judul'] = 'Laporan';
+				$data['user'] = $user;
+				$data['debit'] = $this->m_kas->getKasMasuk();
+				$data['kredit'] = $this->m_kas->getKasKeluar();
+				$data['kas'] = $this->m_kas->getKas([
+					'order_by' => 'tanggal',
+					'order_dir' => 'DESC',
+					'status' => 'sampah'
+				]);
+				$data['masuk'] = $this->m_kas->TotalMasuk();
+				$data['keluar'] = $this->m_kas->TotalKeluar();
+				$this->load->view('include/header', $data);
+				$this->load->view('admin/laporanSampah', $data);
+				$this->load->view('include/footer');
+			} else {
+				$data['menu'] = 'Laporan';
+				$data['judul'] = 'Laporan';
+				$data['user'] = $user;
+				$data['kas'] = $this->m_kas->getKas([
+					'order_by' => 'tanggal',
+					'order_dir' => 'DESC',
+					'status' => 'sampah'
+				]);
+				$data['masuk'] = $this->m_kas->TotalMasuk();
+				$data['keluar'] = $this->m_kas->TotalKeluar();
+				$this->load->view('include/header_warga', $data);
+				$this->load->view('warga/laporanSampah', $data);
+				$this->load->view('include/footer');
+			}
+		}
+	}
+
 	public function lapKas()
 	{
+		$data['namaWarga'] = []; // Array untuk menyimpan nama warga
+		foreach ($this->m_kas->getWarga() as $w) {
+			$data['namaWarga'][$w->idWarga] = ucwords(strtolower($w->nama));
+		}
 		$data['judul'] = 'Laporan';
-		$data['kas'] = $this->M_kas->getKas();
-		$data['kredit'] = $this->M_kas->kredit(); // Memanggil method kredit dari model
-		$data['masuk'] = $this->M_kas->TotalMasuk();
-		$data['keluar'] = $this->M_kas->TotalKeluar();
+		$data['kas'] = $this->M_kas->getKas([
+			'order_by' => 'tanggal',
+			'order_dir' => 'DESC',
+			'status' => 'kas'
+		]);
+		$data['konten'] = 'lap_kas';
+		$this->load->view('laporan/lap_kas', $data);
+	}
+
+	public function lapSampah()
+	{
+		$data['namaWarga'] = []; // Array untuk menyimpan nama warga
+		foreach ($this->m_kas->getWarga() as $w) {
+			$data['namaWarga'][$w->idWarga] = ucwords(strtolower($w->nama));
+		}
+		$data['judul'] = 'Laporan';
+		$data['kas'] = $this->M_kas->getKas([
+			'order_by' => 'tanggal',
+			'order_dir' => 'DESC',
+			'status' => 'sampah'
+		]);
 		$data['konten'] = 'lap_kas';
 		$this->load->view('laporan/lap_kas', $data);
 	}
