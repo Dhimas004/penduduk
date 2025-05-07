@@ -17,7 +17,7 @@
                                             <td class="align-top" style="width: 15%;">ID Warga</td>
                                             <td class="align-top" style="width: 20%;">: <?= $detailWarga['idWarga']; ?></td>
                                             <td class="align-top" style="width: 15%;">Status Perkawinan</td>
-                                            <td class="align-top" style="width: 20%;">: <?= $detailWarga['status_perkawinan']; ?></td>
+                                            <td class="align-top" style="width: 20%;">: <?= ucwords(str_replace('_', ' ', $detailWarga['status_perkawinan'])); ?></td>
                                         </tr>
                                         <tr>
                                             <td class="align-top" style="width: 15%;">NIK</td>

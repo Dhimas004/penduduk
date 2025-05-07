@@ -39,14 +39,15 @@ class Penduduk extends CI_Controller
 				$this->load->view('include/header', $data);
 				$this->load->view('admin/kasMasuk', $data);
 				$this->load->view('include/footer');
-			} else if ($user['role_id'] == 3) {
+			} else if ($user['role_id'] == 5) {
 				$data['menu'] = 'Kas Masuk';
 				$data['judul'] = 'Kas Masuk';
 				$data['user'] = $user;
 				$data['ttl'] = $this->m_kas->TotalMasuk();
 				$data['masuk'] = $this->m_kas->getKasMasuk();
-				$this->load->view('include/header_1', $data);
-				$this->load->view('bendahara/kasMasuk', $data);
+				$data['warga'] = $this->m_kas->getWarga();
+				$this->load->view('include/header_bendahara', $data);
+				$this->load->view('admin/kasMasuk', $data);
 				$this->load->view('include/footer');
 			} else {
 				$data['menu'] = 'Kas Masuk';
@@ -84,6 +85,15 @@ class Penduduk extends CI_Controller
 				$data['sampah'] = $this->m_kas->getSampah();
 				$data['warga'] = $this->m_kas->getWarga();
 				$this->load->view('include/header', $data);
+				$this->load->view('admin/sampah', $data);
+				$this->load->view('include/footer');
+			} else if ($user['role_id'] == 5) {
+				$data['menu'] = 'Kas Masuk';
+				$data['judul'] = 'Kas Masuk';
+				$data['user'] = $user;
+				$data['sampah'] = $this->m_kas->getSampah();
+				$data['warga'] = $this->m_kas->getWarga();
+				$this->load->view('include/header_bendahara', $data);
 				$this->load->view('admin/sampah', $data);
 				$this->load->view('include/footer');
 			}
@@ -143,13 +153,13 @@ class Penduduk extends CI_Controller
 				$this->load->view('include/header', $data);
 				$this->load->view('admin/kasKeluar', $data);
 				$this->load->view('include/footer');
-			} else if ($user['role_id'] == 3) {
+			} else if ($user['role_id'] == 5) {
 				$data['menu'] = 'Kas Keluar';
 				$data['judul'] = 'Kas Keluar';
 				$data['user'] = $user;
 				$data['ttl'] = $this->m_kas->TotalKeluar();
 				$data['keluar'] = $this->m_kas->getKasKeluar();
-				$this->load->view('include/header_1', $data);
+				$this->load->view('include/header_bendahara', $data);
 				$this->load->view('bendahara/kasKeluar', $data);
 				$this->load->view('include/footer');
 			} else {
@@ -245,6 +255,22 @@ class Penduduk extends CI_Controller
 				$this->load->view('include/header', $data);
 				$this->load->view('admin/laporan', $data);
 				$this->load->view('include/footer');
+			} else if ($user['role_id'] == 5) {
+				$data['menu'] = 'Laporan';
+				$data['judul'] = 'Laporan';
+				$data['user'] = $user;
+				$data['debit'] = $this->m_kas->getKasMasuk();
+				$data['kredit'] = $this->m_kas->getKasKeluar();
+				$data['kas'] = $this->m_kas->getKas([
+					'order_by' => 'tanggal',
+					'order_dir' => 'DESC',
+					'status' => 'kas'
+				]);
+				$data['masuk'] = $this->m_kas->TotalMasuk();
+				$data['keluar'] = $this->m_kas->TotalKeluar();
+				$this->load->view('include/header_bendahara', $data);
+				$this->load->view('admin/laporan', $data);
+				$this->load->view('include/footer');
 			} else {
 				$data['menu'] = 'Laporan';
 				$data['judul'] = 'Laporan';
@@ -284,6 +310,22 @@ class Penduduk extends CI_Controller
 				$data['masuk'] = $this->m_kas->TotalMasuk();
 				$data['keluar'] = $this->m_kas->TotalKeluar();
 				$this->load->view('include/header', $data);
+				$this->load->view('admin/laporanSampah', $data);
+				$this->load->view('include/footer');
+			} else if ($user['role_id'] == 5) {
+				$data['menu'] = 'Laporan';
+				$data['judul'] = 'Laporan';
+				$data['user'] = $user;
+				$data['debit'] = $this->m_kas->getKasMasuk();
+				$data['kredit'] = $this->m_kas->getKasKeluar();
+				$data['kas'] = $this->m_kas->getKas([
+					'order_by' => 'tanggal',
+					'order_dir' => 'DESC',
+					'status' => 'sampah'
+				]);
+				$data['masuk'] = $this->m_kas->TotalMasuk();
+				$data['keluar'] = $this->m_kas->TotalKeluar();
+				$this->load->view('include/header_bendahara', $data);
 				$this->load->view('admin/laporanSampah', $data);
 				$this->load->view('include/footer');
 			} else {
@@ -334,6 +376,33 @@ class Penduduk extends CI_Controller
 		]);
 		$data['konten'] = 'lap_kas';
 		$this->load->view('laporan/lap_kas', $data);
+	}
+
+	public function laporanPembayaranSampahPerbulan()
+	{
+
+		$username = $this->session->userdata('username');
+		$user = $this->db->get_where('users', ['username' => $username])->row_array();
+		$data['namaWarga'] = []; // Array untuk menyimpan nama warga
+		if ($username == '') {
+			redirect('auth');
+		} else {
+			if ($user['role_id'] == 1) {
+				$data['menu'] = 'Laporan Pembayaran Sampah Perbulan';
+				$data['judul'] = 'Laporan Pembayaran Sampah Perbulan';
+				$data['user'] = $user;
+				$this->load->view('include/header', $data);
+				$this->load->view('admin/laporan_pembayaran_sampah_perbulan', $data);
+				$this->load->view('include/footer');
+			} else if ($user['role_id'] == 5) {
+				$data['menu'] = 'Laporan Pembayaran Sampah Perbulan';
+				$data['judul'] = 'Laporan Pembayaran Sampah Perbulan';
+				$data['user'] = $user;
+				$this->load->view('include/header_bendahara', $data);
+				$this->load->view('admin/laporan_pembayaran_sampah_perbulan', $data);
+				$this->load->view('include/footer');
+			}
+		}
 	}
 }
 

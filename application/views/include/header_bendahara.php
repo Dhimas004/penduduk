@@ -100,13 +100,6 @@
                         </li>
 
                         <li class="nav-item  mr-3">
-                            <a class="nav-link text-white" href="<?= base_url('admin/user'); ?>">
-                                <i class="fas fa-users"></i> Akses
-                            </a>
-                        </li>
-
-
-                        <li class="nav-item  mr-3">
                             <a class="nav-link text-white" href="<?= base_url('warga/ubahDataDiri'); ?>">
                                 <i class="fas fa-user"></i> Ubah Data Diri
                             </a>

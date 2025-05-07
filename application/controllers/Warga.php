@@ -8,7 +8,6 @@ class Warga extends CI_Controller
 	{
 		$username = $this->session->userdata('username');
 		$user = $this->db->get_where('users', ['username' => $username])->row_array();
-
 		if ($username == '') {
 			redirect('auth');
 		} else {
@@ -20,24 +19,13 @@ class Warga extends CI_Controller
 				$this->load->view('include/header', $data);
 				$this->load->view('admin/warga', $data);
 				$this->load->view('include/footer');
-				# code...
-			} else if ($user['role_id'] == 3) {
+			} else if ($user['role_id'] == 5) {
 				$data['menu'] = 'warga';
 				$data['judul'] = 'Data Warga';
 				$data['user'] = $user;
-				$data['user'] = $user;
 				$data['warga'] = $this->m_kas->getWarga();
-				$this->load->view('include/header_1', $data);
-				$this->load->view('bendahara/warga', $data);
-				$this->load->view('include/footer');
-			} else if ($user['role_id'] == 2) {
-				$data['menu'] = 'warga';
-				$data['judul'] = 'Data Warga';
-				$data['user'] = $user;
-				$data['user'] = $user;
-				$data['warga'] = $this->m_kas->getWarga();
-				$this->load->view('include/header_1', $data);
-				$this->load->view('rt/warga', $data);
+				$this->load->view('include/header_bendahara', $data);
+				$this->load->view('warga/warga', $data);
 				$this->load->view('include/footer');
 			} else {
 				$data['menu'] = 'warga';

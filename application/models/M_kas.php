@@ -31,6 +31,16 @@ class M_kas extends CI_Model
 		return $this->db->get('data_transaksi')->result();
 	}
 
+	public function getPembayaranSampahByTahun($tahun)
+	{
+		// Mengambil data dari tabel 'data_transaksi' dengan kondisi status = 'sampah'
+		// dan tahun yang ada di kolom 'tanggal'
+		$this->db->where('status', 'sampah');  // Menyaring berdasarkan status
+		$this->db->where('YEAR(tanggal)', $tahun);  // Menyaring berdasarkan tahun yang ada di kolom 'tanggal'
+
+		return $this->db->get('data_transaksi')->result();  // Mengembalikan hasil query
+	}
+
 	public function getSampah($idKas = '')
 	{
 		if ($idKas) {
