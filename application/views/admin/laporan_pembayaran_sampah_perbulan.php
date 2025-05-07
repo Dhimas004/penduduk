@@ -18,12 +18,14 @@
                         </div>
                     </div>
                     <!-- CONTENT -->
-                    <div id="laporan-container">
+                    <div id="laporan-container table-responsive">
                         <!-- Data laporan akan dimuat di sini -->
                     </div>
                     <!-- END CONTENT -->
                 </div>
             </div>
+            <br><br><br>
+            <br><br><br>
         </div>
     </section>
     <!-- END DATA TABLE-->

@@ -1,6 +1,5 @@
 <style>
     td[align='center'] {
-        font-size: 20px;
         font-weight: bolder;
     }
 </style>
