@@ -24,8 +24,6 @@
                     <!-- END CONTENT -->
                 </div>
             </div>
-            <br><br><br>
-            <br><br><br>
         </div>
     </section>
     <!-- END DATA TABLE-->
