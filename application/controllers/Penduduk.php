@@ -248,7 +248,7 @@ class Penduduk extends CI_Controller
 				$data['kas'] = $this->m_kas->getKas([
 					'order_by' => 'tanggal',
 					'order_dir' => 'DESC',
-					'status' => 'kas'
+					'status' => 'kas',
 				]);
 				$data['masuk'] = $this->m_kas->TotalMasuk();
 				$data['keluar'] = $this->m_kas->TotalKeluar();
@@ -305,7 +305,8 @@ class Penduduk extends CI_Controller
 				$data['kas'] = $this->m_kas->getKas([
 					'order_by' => 'tanggal',
 					'order_dir' => 'DESC',
-					'status' => 'sampah'
+					'status' => 'sampah',
+					'status_persetujuan' => '1'
 				]);
 				$data['masuk'] = $this->m_kas->TotalMasuk();
 				$data['keluar'] = $this->m_kas->TotalKeluar();
@@ -403,6 +404,100 @@ class Penduduk extends CI_Controller
 				$this->load->view('include/footer');
 			}
 		}
+	}
+
+	public function setujuiPembayaranSampah()
+	{
+
+		$username = $this->session->userdata('username');
+		$user = $this->db->get_where('users', ['username' => $username])->row_array();
+		$data['namaWarga'] = []; // Array untuk menyimpan nama warga
+		foreach ($this->m_kas->getWarga() as $w) {
+			$data['namaWarga'][$w->idWarga] = ucwords(strtolower($w->nama));
+		}
+		$data['pembayaranSampah'] = $this->M_kas->getPembayaranSampahBelumDisetujui();
+		if ($username == '') {
+			redirect('auth');
+		} else {
+			if ($user['role_id'] == 1) {
+				$data['menu'] = 'Laporan Pembayaran Sampah Perbulan';
+				$data['judul'] = 'Laporan Pembayaran Sampah Perbulan';
+				$data['user'] = $user;
+				$this->load->view('include/header', $data);
+				$this->load->view('admin/setujui_pembayaran_sampah', $data);
+				$this->load->view('include/footer');
+			} else if ($user['role_id'] == 5) {
+				$data['menu'] = 'Laporan Pembayaran Sampah Perbulan';
+				$data['judul'] = 'Laporan Pembayaran Sampah Perbulan';
+				$data['user'] = $user;
+				$this->load->view('include/header_bendahara', $data);
+				$this->load->view('admin/setujui_pembayaran_sampah', $data);
+				$this->load->view('include/footer');
+			}
+		}
+	}
+
+
+	public function setujuiPembayaranSampahAction()
+	{
+		$username = $this->session->userdata('username');
+		$user = $this->db->get_where('users', ['username' => $username])->row_array();
+		$idKas = $this->input->post('idKas');
+		$data = [
+			'status_persetujuan' => 1,
+			'tanggal_persetujuan' => date('Y-m-d H:i:s'),
+			'user_id_persetujuan' => $user['user_id'],
+		];
+		$this->m_kas->updateKas($data, $idKas);
+		$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil disetujui!</div>');
+		redirect('penduduk/sampah');
+	}
+
+	public function tolakPembayaranSampahAction()
+	{
+		$username = $this->session->userdata('username');
+		$user = $this->db->get_where('users', ['username' => $username])->row_array();
+		$idKas = $this->input->post('idKas');
+		$data = [
+			'status_persetujuan' => 2,
+			'tanggal_persetujuan' => date('Y-m-d H:i:s'),
+			'user_id_persetujuan' => $user['user_id'],
+			'alasan_penolakan' => $this->input->post('alasan_penolakan'),
+		];
+		$this->m_kas->updateKas($data, $idKas);
+		$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil ditolak!</div>');
+		redirect('penduduk/sampah');
+	}
+
+	public function setujuiPembayaranKasAction()
+	{
+		$username = $this->session->userdata('username');
+		$user = $this->db->get_where('users', ['username' => $username])->row_array();
+		$idKas = $this->input->post('idKas');
+		$data = [
+			'status_persetujuan' => 1,
+			'tanggal_persetujuan' => date('Y-m-d H:i:s'),
+			'user_id_persetujuan' => $user['user_id'],
+		];
+		$this->m_kas->updateKas($data, $idKas);
+		$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil disetujui!</div>');
+		redirect('penduduk');
+	}
+
+	public function tolakPembayaranKasAction()
+	{
+		$username = $this->session->userdata('username');
+		$user = $this->db->get_where('users', ['username' => $username])->row_array();
+		$idKas = $this->input->post('idKas');
+		$data = [
+			'status_persetujuan' => 2,
+			'tanggal_persetujuan' => date('Y-m-d H:i:s'),
+			'user_id_persetujuan' => $user['user_id'],
+			'alasan_penolakan' => $this->input->post('alasan_penolakan'),
+		];
+		$this->m_kas->updateKas($data, $idKas);
+		$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil ditolak!</div>');
+		redirect('penduduk');
 	}
 }
 

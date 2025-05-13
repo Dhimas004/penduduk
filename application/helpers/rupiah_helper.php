@@ -26,12 +26,19 @@ if (!function_exists('tgl_indo')) {
             'November',
             'Desember'
         );
-        $pecahkan = explode('-', $tanggal);
 
-        // variabel pecahkan 0 = tanggal
-        // variabel pecahkan 1 = bulan
-        // variabel pecahkan 2 = tahun
+        // Memisahkan tanggal dan waktu jika ada
+        $datetime = explode(' ', $tanggal);
+        $tanggal_only = $datetime[0];
+        $time = isset($datetime[1]) ? $datetime[1] : '';
 
-        return $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
+        // Memisahkan tanggal (YYYY-MM-DD)
+        $pecahkan = explode('-', $tanggal_only);
+
+        // Format tanggal Indonesia
+        $tgl_indo = $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
+
+        // Menambahkan waktu jika ada
+        return $time ? $tgl_indo . ' ' . $time : $tgl_indo;
     }
 }

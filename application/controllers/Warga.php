@@ -119,18 +119,10 @@ class Warga extends CI_Controller
 		if ($username == '') {
 			redirect('auth');
 		} else {
-			if ($user['role_id'] == 1) {
-				$data['judul'] = 'Ubah Data Diri';
-				$data['user'] = $user;
-				$this->load->view('include/header', $data);
-				$this->load->view('warga/ubah_data_diri', $data);
-				$this->load->view('include/footer');
-			} else {
-				$data['judul'] = 'Ubah Data Diri';
-				$this->load->view('include/header_warga', $data);
-				$this->load->view('warga/ubah_data_diri', $data);
-				$this->load->view('include/footer');
-			}
+			$data['judul'] = 'Ubah Data Diri';
+			$this->load->view('include/header_warga', $data);
+			$this->load->view('warga/ubah_data_diri', $data);
+			$this->load->view('include/footer');
 		}
 	}
 
@@ -177,6 +169,26 @@ class Warga extends CI_Controller
 				$this->load->view('warga/detail_warga', $data);
 				$this->load->view('include/footer');
 			}
+		}
+	}
+
+	public function pembayaranKas()
+	{
+		$username = $this->session->userdata('username');
+		$user = $this->db->get_where('users', ['username' => $username])->row_array();
+		$data = [];
+		$data['namaWarga'] = []; // Array untuk menyimpan nama warga
+		foreach ($this->m_kas->getWarga() as $w) {
+			$data['namaWarga'][$w->idWarga] = ucwords(strtolower($w->nama));
+		}
+		$data['user'] = $user;
+		$data['kas'] = $this->m_kas->getKasByIdWarga($user['idWarga']);
+		if ($username == '') {
+			redirect('auth');
+		} else {
+			$this->load->view('include/header_warga', $data);
+			$this->load->view('warga/pembayaranKas', $data);
+			$this->load->view('include/footer');
 		}
 	}
 }

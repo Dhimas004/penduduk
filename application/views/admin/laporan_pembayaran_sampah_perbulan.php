@@ -18,8 +18,10 @@
                         </div>
                     </div>
                     <!-- CONTENT -->
-                    <div id="laporan-container table-responsive">
-                        <!-- Data laporan akan dimuat di sini -->
+                    <div class="table-responsive">
+                        <div id="laporan-container">
+                            <!-- Data laporan akan dimuat di sini -->
+                        </div>
                     </div>
                     <!-- END CONTENT -->
                 </div>

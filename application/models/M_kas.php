@@ -12,6 +12,11 @@ class M_kas extends CI_Model
 			$this->db->where('status', $params['status']);
 		}
 
+		// Tambahkan filter status_persetujuan jika ada
+		if (!empty($params['status_persetujuan'])) {
+			$this->db->where('status_persetujuan', $params['status_persetujuan']);
+		}
+
 		// Jika idKas diset, ambil satu baris saja
 		if (!empty($params['idKas'])) {
 			$this->db->where('idKas', $params['idKas']);
@@ -31,12 +36,21 @@ class M_kas extends CI_Model
 		return $this->db->get('data_transaksi')->result();
 	}
 
+
 	public function getPembayaranSampahByTahun($tahun)
 	{
-		// Mengambil data dari tabel 'data_transaksi' dengan kondisi status = 'sampah'
-		// dan tahun yang ada di kolom 'tanggal'
-		$this->db->where('status', 'sampah');  // Menyaring berdasarkan status
-		$this->db->where('YEAR(tanggal)', $tahun);  // Menyaring berdasarkan tahun yang ada di kolom 'tanggal'
+		$this->db->where('status', 'sampah');
+		$this->db->where('status_persetujuan', '1');
+		$this->db->where('YEAR(tanggal)', $tahun);
+
+		return $this->db->get('data_transaksi')->result();
+	}
+
+	public function getPembayaranSampahBelumDisetujui()
+	{
+		// Menyaring berdasarkan status 'sampah' dan status_persetujuan = 0
+		$this->db->where('status', 'sampah');
+		$this->db->where('status_persetujuan', 0);
 
 		return $this->db->get('data_transaksi')->result();  // Mengembalikan hasil query
 	}
@@ -82,6 +96,14 @@ class M_kas extends CI_Model
 		return $this->db->get_where('data_transaksi', ['jenis' => 'masuk'])->result();
 	}
 
+	public function getKasByIdWarga($idWarga)
+	{
+		return $this->db->where('jenis', 'masuk')
+			->where('idWarga', $idWarga)
+			->get('data_transaksi')
+			->result();
+	}
+
 	public function TotalMasuk()
 	{
 		return $this->db->query('SELECT SUM(jumlah) as total from data_transaksi where jenis="masuk" ')->result();
@@ -100,7 +122,7 @@ class M_kas extends CI_Model
 	public function getWarga($idWarga = '')
 	{
 		if ($idWarga) {
-			return $this->db->get('data_warga', ['idWarga' => $idWarga])->row_array();
+			return $this->db->where('idWarga', $idWarga)->get('data_warga')->row_array();
 		} else {
 			return $this->db->order_by('nama', 'ASC')->get('data_warga')->result();
 		}

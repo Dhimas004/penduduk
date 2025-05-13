@@ -1,6 +1,10 @@
         <!-- PAGE CONTENT-->
         <div class="page-content--bgf7">
         	<!-- DATA TABLE-->
+        	<?php if ($this->session->flashdata('message')): ?>
+        		<br>
+        		<?= $this->session->flashdata('message'); ?>
+        	<?php endif; ?>
         	<section class="p-t-60">
         		<div class="container">
         			<div class="row">
@@ -23,6 +27,9 @@
         									<th>Nama Warga</th>
         									<th>Keterangan</th>
         									<th>Tanggal</th>
+        									<th>Tanggal Pembayaran</th>
+        									<th>Status Persetujuan</th>
+        									<th>Tanggal Persetujuan</th>
         									<th>Jumlah</th>
         									<th>Aksi</th>
         								</tr>
@@ -30,32 +37,50 @@
         							<tbody>
         								<?php
 										$total = 0;
-										foreach ($masuk as $msk) { ?>
-        									<tr>
-        										<td><?= $msk->idKas; ?></td>
-        										<td><?= ($msk->idWarga != 0 ? $namaWarga[$msk->idWarga] : ''); ?></td>
-        										<td><?= $msk->keterangan; ?></td>
-        										<td><?= date('d-m-Y', strtotime($msk->tanggal)); ?></td>
-        										<td><?= rupiah($msk->jumlah); ?></td>
-        										<td>
-        											<div class="table-data-feature">
-        												<button class="item" data-toggle="modal" data-target="#editKasModal<?= $msk->idKas; ?>" data-placement="top" title="Edit">
-        													<i class="zmdi zmdi-edit"></i>
-        												</button>
-        												<button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
-        													<a href="#!" onclick="deleteConfirm('<?= base_url('penduduk/delkas/' . $msk->idKas); ?>')">
-        														<i class="zmdi zmdi-delete" style="color:red"></i>
-        												</button>
-        											</div>
-        										</td>
-        									</tr>
+										foreach ($masuk as $msk) {
+											if ($msk->status == 'kas') {
+										?>
+        										<tr>
+        											<td><?= $msk->idKas; ?></td>
+        											<td><?= ($msk->idWarga != 0 ? $namaWarga[$msk->idWarga] : ''); ?></td>
+        											<td><?= $msk->keterangan; ?></td>
+        											<td><?= tgl_indo($msk->tanggal) ?></td>
+        											<td><?= tgl_indo($msk->created_at) ?></td>
+        											<td><?php
+														if ($msk->status_persetujuan == '0') echo "Belum Disetujui";
+														else if ($msk->status_persetujuan == '1') echo "Sudah Disetujui";
+														else if ($msk->status_persetujuan == '2') echo "Ditolak <br/><small>(" . $msk->alasan_penolakan . ")</small>";
+														?></td>
+        											<td><?= ($msk->tanggal_persetujuan != null ? tgl_indo($msk->tanggal_persetujuan) : ''); ?></td>
+        											<td><?= rupiah($msk->jumlah); ?></td>
+        											<td>
+        												<div class="table-data-feature">
+        													<?php if ($msk->status_persetujuan == 0) { ?>
+        														<button class="item" data-toggle="modal" data-target="#setujuiPembayaranKas<?= $msk->idKas; ?>" data-placement="top" title="Edit">
+        															<i class="zmdi zmdi-check" style="color: green;"></i>
+        														</button>
+        														<button class="item" data-toggle="modal" data-target="#tolakPembayaranKas<?= $msk->idKas; ?>" data-placement="top" title="Edit">
+        															<i class="zmdi zmdi-close" style="color: red;"></i>
+        														</button>
+        													<?php } ?>
+        													<button class="item" data-toggle="modal" data-target="#editKasModal<?= $msk->idKas; ?>" data-placement="top" title="Edit">
+        														<i class="zmdi zmdi-edit"></i>
+        													</button>
+        													<button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
+        														<a href="#!" onclick="deleteConfirm('<?= base_url('penduduk/delkas/' . $msk->idKas); ?>')">
+        															<i class="zmdi zmdi-delete" style="color:red"></i>
+        													</button>
+        												</div>
+        											</td>
+        										</tr>
         								<?php
-											$total += $msk->jumlah;
+												$total += $msk->jumlah;
+											}
 										} ?>
         							</tbody>
         							<thead>
         								<tr>
-        									<th colspan="4" scope="col">Total</th>
+        									<th colspan="7" scope="col">Total</th>
         									<th scope="col"><?= rupiah($total); ?></th>
         									<th scope="col">&nbsp;</th>
         								</tr>
@@ -176,6 +201,87 @@
         							</form>
         						</div>
         					</div>
+        				</div>
+        			</div>
+        		</div>
+
+        		<div class="modal fade" id="setujuiPembayaranKas<?= $val->idKas; ?>" tabindex="-1" role="dialog" aria-labelledby="editKasModal" aria-hidden="true">
+        			<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        				<div class="modal-content">
+        					<div class="modal-header">
+        						<h4 class="modal-title" id="editKasModal">Setujui Pembayaran</h4>
+        						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        					</div>
+        					<?= form_open_multipart('penduduk/setujuiPembayaranKasAction'); ?>
+        					<div class="modal-body">
+        						<div class="login-form">
+        							<input type="hidden" name="idKas" id="idKas" value="<?= $val->idKas; ?>">
+        							<table class="table table-bordered">
+        								<tbody>
+        									<tr>
+        										<td>Nomor</td>
+        										<td><?= $val->idKas; ?></td>
+        									</tr>
+        									<tr>
+        										<td>Nama Warga</td>
+        										<td><?= ($val->idWarga != 0 ?  $namaWarga[$val->idWarga] : ''); ?></td>
+        									</tr>
+        									<tr>
+        										<td style="width: 43%;">Tanggal Pembayaran</td>
+        										<td><?= tgl_indo($val->tanggal); ?></td>
+        									</tr>
+        								</tbody>
+        							</table>
+        						</div>
+        					</div>
+        					<div class="modal-footer">
+        						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        						<button type="submit" class="btn btn-primary">Konfirmasi</button>
+        					</div>
+        					</form>
+        				</div>
+        			</div>
+        		</div>
+
+        		<div class="modal fade" id="tolakPembayaranKas<?= $val->idKas; ?>" tabindex="-1" role="dialog" aria-labelledby="editKasModal" aria-hidden="true">
+        			<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        				<div class="modal-content">
+        					<div class="modal-header">
+        						<h4 class="modal-title" id="editKasModal">Tolak Pembayaran</h4>
+        						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        					</div>
+        					<?= form_open_multipart('penduduk/tolakPembayaranKasAction'); ?>
+        					<div class="modal-body">
+        						<div class="login-form">
+        							<input type="hidden" name="idKas" id="idKas" value="<?= $val->idKas; ?>">
+        							<table class="table table-bordered">
+        								<tbody>
+        									<tr>
+        										<td>Nomor</td>
+        										<td><?= $val->idKas; ?></td>
+        									</tr>
+        									<tr>
+        										<td>Nama Warga</td>
+        										<td><?= ($val->idWarga != 0 ?  $namaWarga[$val->idWarga] : ''); ?></td>
+        									</tr>
+        									<tr>
+        										<td style="width: 43%;">Tanggal Pembayaran</td>
+        										<td><?= tgl_indo($val->tanggal); ?></td>
+        									</tr>
+        								</tbody>
+        							</table>
+        							<br />
+        							<div class="form-group">
+        								<label for="alasan_penolakan">Alasan Penolakan</label>
+        								<textarea class="form-control" name="alasan_penolakan" id="alasan_penolakan" style="height: 100px;"></textarea>
+        							</div>
+        						</div>
+        					</div>
+        					<div class="modal-footer">
+        						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        						<button type="submit" class="btn btn-primary">Konfirmasi</button>
+        					</div>
+        					</form>
         				</div>
         			</div>
         		</div>

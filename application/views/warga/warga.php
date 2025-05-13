@@ -26,7 +26,7 @@
         							<tbody>
         								<?php foreach ($warga as $val): ?>
         									<tr>
-        										<td><?= $val->nik; ?></td>
+        										<td>XXXXXXXXXXXXXXXX</td>
         										<td><?= $val->nama; ?></td>
         										<td><?= $val->jekel; ?></td>
         										<td class="process"><?= $val->tempat_lahir; ?>, <?= date('d-m-Y', strtotime($val->tanggal_lahir)); ?></td>

@@ -19,52 +19,58 @@
                                </div>
                            </div>
                            <!-- DATA TABLE-->
-                           <div class="table-responsive m-b-40">
-                               <table class="table table-borderless table-data3">
-                                   <thead>
-                                       <tr>
-                                           <th>Nomor</th>
-                                           <th>Status</th>
-                                           <th>Jenis</th>
-                                           <th>Nama Warga</th>
-                                           <th>Tanggal</th>
-                                           <th>Keterangan</th>
-                                           <th>Jumlah</th>
-                                       </tr>
-                                   </thead>
-                                   <tbody>
-                                       <?php
-                                        $saldo = 0;
-                                        foreach ($kas as $kas) { ?>
+                           <?php if (count($kas) > 0) { ?>
+                               <div class="table-responsive m-b-40">
+                                   <table class="table table-borderless table-data3">
+                                       <thead>
                                            <tr>
-                                               <td><?= $kas->idKas; ?></td>
-                                               <td><?= ucfirst($kas->status); ?></td>
-                                               <td><?= ucfirst($kas->jenis); ?></td>
-                                               <td><?= ($kas->idWarga ? ucwords(strtolower($namaWarga[$kas->idWarga])) : '')  ?></td>
-                                               <td><?= tgl_indo($kas->tanggal); ?></td>
-                                               <td><?= $kas->keterangan; ?></td>
-                                               <td><?php
-                                                    if ($kas->jenis == 'keluar') {
-                                                        echo "<span style='color:red'>" . rupiah($kas->jumlah * -1) . "</span>";
-                                                        $saldo -= $kas->jumlah;
-                                                    } else {
-                                                        echo "<span style='color:green'>" . rupiah($kas->jumlah) . "</span>";
-                                                        $saldo += $kas->jumlah;
-                                                    }
-                                                    ?>
-                                               </td>
+                                               <th>Nomor</th>
+                                               <th>Status</th>
+                                               <th>Jenis</th>
+                                               <th>Nama Warga</th>
+                                               <th>Tanggal</th>
+                                               <th>Keterangan</th>
+                                               <th>Jumlah</th>
                                            </tr>
-                                       <?php } ?>
-                                   </tbody>
-                                   <thead>
-                                       <tr>
-                                           <th colspan="6" scope="col">Total</th>
-                                           <th scope="col"><?= rupiah($saldo); ?></th>
-                                       </tr>
-                                   </thead>
-                               </table>
-                           </div>
-                           <!-- END DATA TABLE-->
+                                       </thead>
+                                       <tbody>
+                                           <?php
+                                            $saldo = 0;
+                                            foreach ($kas as $kas) {
+                                            ?>
+                                               <tr>
+                                                   <td><?= $kas->idKas; ?></td>
+                                                   <td><?= ucfirst($kas->status); ?></td>
+                                                   <td><?= ucfirst($kas->jenis); ?></td>
+                                                   <td><?= ($kas->idWarga ? ucwords(strtolower($namaWarga[$kas->idWarga])) : '')  ?></td>
+                                                   <td><?= tgl_indo($kas->tanggal); ?></td>
+                                                   <td><?= $kas->keterangan; ?></td>
+                                                   <td><?php
+                                                        if ($kas->jenis == 'keluar') {
+                                                            echo "<span style='color:red'>" . rupiah($kas->jumlah * -1) . "</span>";
+                                                            $saldo -= $kas->jumlah;
+                                                        } else {
+                                                            echo "<span style='color:green'>" . rupiah($kas->jumlah) . "</span>";
+                                                            $saldo += $kas->jumlah;
+                                                        }
+                                                        ?>
+                                                   </td>
+                                               </tr>
+                                           <?php }
+                                            ?>
+                                       </tbody>
+                                       <thead>
+                                           <tr>
+                                               <th colspan="6" scope="col">Total</th>
+                                               <th scope="col"><?= rupiah($saldo); ?></th>
+                                           </tr>
+                                       </thead>
+                                   </table>
+                               <?php } else { ?>
+                                   TIDAK ADA LAPORAN SAMPAH
+                               <?php } ?>
+                               </div>
+                               <!-- END DATA TABLE-->
                        </div>
                    </div>
                </div>

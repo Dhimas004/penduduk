@@ -28,24 +28,29 @@
                                     <tbody>
                                         <?php
                                         $saldo = 0;
-                                        foreach ($kas as $kas) { ?>
-                                            <tr>
-                                                <td><?= $kas->idKas; ?></td>
-                                                <td><?= ucfirst($kas->jenis); ?></td>
-                                                <td><?= ($kas->idWarga ? ucwords(strtolower($namaWarga[$kas->idWarga])) : '')  ?></td>
-                                                <td><?= tgl_indo($kas->tanggal); ?></td>
-                                                <td><?= $kas->keterangan; ?></td>
-                                                <td align="right"><?php
-                                                                    if ($kas->jenis == 'keluar') {
-                                                                        echo "<span style='color:red'>" . rupiah($kas->jumlah * -1) . "</span>";
-                                                                        $saldo -= $kas->jumlah;
-                                                                    } else {
-                                                                        echo "<span style='color:green'>" . rupiah($kas->jumlah) . "</span>";
-                                                                        $saldo += $kas->jumlah;
-                                                                    }
-                                                                    ?></td>
-                                            </tr>
-                                        <?php } ?>
+                                        foreach ($kas as $kas) {
+                                            $show = 1;
+                                            if ($kas->jenis == 'masuk' && in_array($kas->status_persetujuan, ['0', '2'])) $show = 0;
+                                            if ($show) {
+                                        ?>
+                                                <tr>
+                                                    <td><?= $kas->idKas; ?></td>
+                                                    <td><?= ucfirst($kas->jenis); ?></td>
+                                                    <td><?= ($kas->idWarga ? ucwords(strtolower($namaWarga[$kas->idWarga])) : '')  ?></td>
+                                                    <td><?= tgl_indo($kas->tanggal); ?></td>
+                                                    <td><?= $kas->keterangan; ?></td>
+                                                    <td align="right"><?php
+                                                                        if ($kas->jenis == 'keluar') {
+                                                                            echo "<span style='color:red'>" . rupiah($kas->jumlah * -1) . "</span>";
+                                                                            $saldo -= $kas->jumlah;
+                                                                        } else {
+                                                                            echo "<span style='color:green'>" . rupiah($kas->jumlah) . "</span>";
+                                                                            $saldo += $kas->jumlah;
+                                                                        }
+                                                                        ?></td>
+                                                </tr>
+                                        <?php }
+                                        } ?>
                                     </tbody>
                                     <thead>
                                         <tr>

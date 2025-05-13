@@ -58,6 +58,21 @@
                             </a>
                         </li>
 
+                        <!-- Dropdown Pembayaran -->
+                        <li class="nav-item  mr-3 dropdown">
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="pembayaranDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-credit-card"></i></i> Pembayaran
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="pembayaranDropdown" style="background-color: #393939 !important;">
+                                <a class="dropdown-item text-white" href="<?= base_url('warga/pembayaranKas'); ?>">
+                                    <i class="fas fa-plus"></i> Kas
+                                </a>
+                                <a class="dropdown-item text-white" href="<?= base_url('warga/pembayaranSampah'); ?>">
+                                    <i class="fas fa-plus"></i> Sampah
+                                </a>
+                            </div>
+                        </li>
+
                         <li class="nav-item  mr-3">
                             <a class="nav-link text-white" href="<?= base_url('warga'); ?>">
                                 <i class="fas fa-check-square"></i> Warga
