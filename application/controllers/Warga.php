@@ -181,6 +181,12 @@ class Warga extends CI_Controller
 		foreach ($this->m_kas->getWarga() as $w) {
 			$data['namaWarga'][$w->idWarga] = ucwords(strtolower($w->nama));
 		}
+		$cekId = $this->m_kas->cekNomor();
+		$getId = substr($cekId, 4, 4);
+		$idNow = $getId + 1;
+		$data['warga'] = $this->m_kas->getWarga($user['idWarga']);
+		$data['idKas'] = $idNow;
+		$data['judul'] = "Pembayaran Kas";
 		$data['user'] = $user;
 		$data['kas'] = $this->m_kas->getKasByIdWarga($user['idWarga']);
 		if ($username == '') {
@@ -190,6 +196,46 @@ class Warga extends CI_Controller
 			$this->load->view('warga/pembayaranKas', $data);
 			$this->load->view('include/footer');
 		}
+	}
+
+	public function pembayaranKasAction()
+	{
+		// Konfigurasi Upload File
+		$config['upload_path']   = './assets/uploads/bukti_pembayaran/';
+		$config['allowed_types'] = 'jpg|jpeg|png|gif';
+		$config['max_size']      = 2048; // Maksimal 2MB
+		$config['encrypt_name']  = TRUE; // Nama file akan diacak
+
+		$this->load->library('upload', $config);
+
+		if ($this->upload->do_upload('buktiPembayaran')) {
+			// Jika upload berhasil
+			$uploadData = $this->upload->data();
+			$buktiPembayaran = $uploadData['file_name'];
+		} else {
+			// Jika upload gagal
+			$this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">' . $this->upload->display_errors() . '</div>');
+			redirect('warga/pembayaranKas');
+			return;
+		}
+
+		// Data untuk disimpan
+		$data = [
+			'idKas' => $this->input->post('id_kas'),
+			'idWarga' => $this->input->post('idWarga'),
+			'keterangan' => $this->input->post('keterangan'),
+			'tanggal' => $this->input->post('tanggal'),
+			'jumlah' => $this->input->post('jumlah'),
+			'jenis' => $this->input->post('jenis'),
+			'buktiPembayaran' => $buktiPembayaran // Simpan nama file bukti pembayaran
+		];
+
+		// Simpan data ke database
+		$this->m_kas->saveKas($data);
+
+		// Pesan sukses
+		$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil ditambahkan!</div>');
+		redirect('warga/pembayaranKas');
 	}
 }
 

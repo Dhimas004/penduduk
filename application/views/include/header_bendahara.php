@@ -73,9 +73,6 @@
                                 <a class="dropdown-item text-white" href="<?= base_url('penduduk/sampah'); ?>">
                                     <i class="fas fa-plus"></i> Pembayaran Sampah
                                 </a>
-                                <a class="dropdown-item text-white" href="<?= base_url('penduduk/setujuiPembayaranSampah'); ?>">
-                                    Setujui Pembayaran Sampah
-                                </a>
                             </div>
                         </li>
 

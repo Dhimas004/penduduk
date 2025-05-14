@@ -85,7 +85,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="login-form">
-                                <form action="<?= base_url('penduduk/addKas'); ?>" method="post">
+                                <form action="<?= base_url('warga/pembayaranKasAction'); ?>" enctype="multipart/form-data" method="post">
                                     <div class="form-group">
                                         <label>Nomor</label>
                                         <input class="form-control" type="text" name="id_kas" id="id_kas" value="3000<?= sprintf("%04s", $idKas); ?>" readonly>
@@ -93,12 +93,8 @@
                                     <div class="form-group">
                                         <label>Nama Warga</label>
                                         <select class="form-control" name="idWarga" id="idWarga" value="<?= set_value('idWarga'); ?>">
-                                            <option>Pilih ...</option>
-                                            <?php
-                                            foreach ($warga as $w) {
-                                                echo "<option value='" . $w->idWarga . "'>" . ucwords(strtolower($w->nama)) . "</option>";
-                                            }
-                                            ?>
+                                            <option value="">Pilih ...</option>
+                                            <option value="<?= $warga['idWarga']; ?>" selected><?= $warga['nama']; ?></option>
                                         </select>
                                     </div>
                                     <div class="form-group">
@@ -107,11 +103,18 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Tanggal</label>
-                                        <input class="form-control" type="date" name="tanggal" id="tanggal" value="<?= set_value('tanggal'); ?>" required>
+                                        <input class="form-control" type="date" name="tanggal" id="tanggal" value="<?= set_value('tanggal', date('Y-m-d')); ?>" required>
                                     </div>
                                     <div class="form-group">
                                         <label>Jumlah</label>
                                         <input class="form-control" type="number" name="jumlah" id="jumlah" placeholder="Jumlah Kas Masuk" value="<?= set_value('jumlah'); ?>" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Bukti Pembayaran</label>
+                                        <input class="form-control" type="file" name="buktiPembayaran" id="buktiPembayaran"
+                                            placeholder="Bukti Pembayaran"
+                                            value="<?= set_value('buktiPembayaran'); ?>"
+                                            accept="image/png, image/jpeg, image/gif">
                                     </div>
                                     <div class="form-group" hidden>
                                         <label>Jenis</label>

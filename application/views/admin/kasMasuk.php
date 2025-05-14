@@ -45,7 +45,15 @@
         											<td><?= ($msk->idWarga != 0 ? $namaWarga[$msk->idWarga] : ''); ?></td>
         											<td><?= $msk->keterangan; ?></td>
         											<td><?= tgl_indo($msk->tanggal) ?></td>
-        											<td><?= tgl_indo($msk->created_at) ?></td>
+        											<td>
+        												<?= tgl_indo($msk->created_at) ?>
+        												<?php
+														if ($msk->buktiPembayaran != '') {
+															echo "<small><a href='" . base_url('assets/uploads/bukti_pembayaran/' . $msk->buktiPembayaran) . "' target='_blank'>Bukti Pembayaran</a></small>";
+														}
+														?>
+
+        											</td>
         											<td><?php
 														if ($msk->status_persetujuan == '0') echo "Belum Disetujui";
 														else if ($msk->status_persetujuan == '1') echo "Sudah Disetujui";
