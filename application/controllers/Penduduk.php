@@ -79,8 +79,9 @@ class Penduduk extends CI_Controller
 			redirect('auth');
 		} else {
 			if ($user['role_id'] == 1) {
-				$data['menu'] = 'Kas Masuk';
-				$data['judul'] = 'Kas Masuk';
+				// RT
+				$data['menu'] = 'Sampah';
+				$data['judul'] = 'Sampah';
 				$data['user'] = $user;
 				$data['sampah'] = $this->m_kas->getSampah();
 				$data['warga'] = $this->m_kas->getWarga();
@@ -88,12 +89,23 @@ class Penduduk extends CI_Controller
 				$this->load->view('admin/sampah', $data);
 				$this->load->view('include/footer');
 			} else if ($user['role_id'] == 5) {
-				$data['menu'] = 'Kas Masuk';
-				$data['judul'] = 'Kas Masuk';
+				// Bendahara
+				$data['menu'] = 'Sampah';
+				$data['judul'] = 'Sampah';
 				$data['user'] = $user;
 				$data['sampah'] = $this->m_kas->getSampah();
 				$data['warga'] = $this->m_kas->getWarga();
 				$this->load->view('include/header_bendahara', $data);
+				$this->load->view('admin/sampah', $data);
+				$this->load->view('include/footer');
+			} else if ($user['role_id'] == 4) {
+				// Warga
+				$data['menu'] = 'Sampah';
+				$data['judul'] = 'Sampah';
+				$data['user'] = $user;
+				$data['sampah'] = $this->m_kas->getSampahByIdWarga($user['idWarga']);
+				$data['warga'] = $this->m_kas->getWarga($user['idWarga']);
+				$this->load->view('include/header_warga', $data);
 				$this->load->view('admin/sampah', $data);
 				$this->load->view('include/footer');
 			}

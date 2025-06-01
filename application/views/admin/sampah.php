@@ -35,7 +35,8 @@
         							</thead>
         							<tbody>
         								<?php $total = 0;
-										foreach ($sampah as $s): ?>
+										foreach ($sampah as $s):
+										?>
         									<tr>
         										<td><?= $s->idKas; ?></td>
         										<td><?= ($s->idWarga != 0 ? $namaWarga[$s->idWarga] : ''); ?></td>
@@ -46,7 +47,7 @@
 													else if ($s->status_persetujuan == '1') echo "Sudah Disetujui";
 													else if ($s->status_persetujuan == '2') echo "Ditolak <br/><small>(" . $s->alasan_penolakan . ")</small>";
 													?></td>
-        										<td><?= tgl_indo($s->tanggal_persetujuan); ?></td>
+        										<td><?= ($s->tanggal_persetujuan != '' ? tgl_indo($s->tanggal_persetujuan) : ''); ?></td>
         										<td><?= rupiah($s->jumlah); ?></td>
         										<td>
         											<?php if (in_array($user['role_id'], ['1', '4'])) { ?>
@@ -71,7 +72,8 @@
         											<?php } ?>
         										</td>
         									</tr>
-        								<?php $total += $s->jumlah;
+        								<?php
+											$total += $s->jumlah;
 										endforeach; ?>
         							</tbody>
         							<thead>

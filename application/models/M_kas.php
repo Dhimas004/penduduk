@@ -58,11 +58,22 @@ class M_kas extends CI_Model
 	public function getSampah($idKas = '')
 	{
 		if ($idKas) {
-			return $this->db->get('data_transaksi', ['idKas' => $idKas, 'status' => 'kas'])->row_array();
+			return $this->db->get('data_transaksi', ['idKas' => $idKas, 'status' => 'sampah'])->row_array();
 		} else {
 			return $this->db->where('status', 'sampah')->get('data_transaksi')->result();
 		}
 	}
+
+	public function getSampahByIdWarga($idWarga = '')
+	{
+		return $this->db
+			->where('status', 'sampah')
+			->where('idWarga', $idWarga)
+			->get('data_transaksi')
+			->result();
+	}
+
+
 
 	public function cekNomor()
 	{
@@ -122,7 +133,7 @@ class M_kas extends CI_Model
 	public function getWarga($idWarga = '')
 	{
 		if ($idWarga) {
-			return $this->db->where('idWarga', $idWarga)->get('data_warga')->row_array();
+			return $this->db->where('idWarga', $idWarga)->get('data_warga')->result();
 		} else {
 			return $this->db->order_by('nama', 'ASC')->get('data_warga')->result();
 		}

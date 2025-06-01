@@ -67,7 +67,7 @@
                                 <a class="dropdown-item text-white" href="<?= base_url('warga/pembayaranKas'); ?>">
                                     <i class="fas fa-plus"></i> Kas
                                 </a>
-                                <a class="dropdown-item text-white" href="<?= base_url('warga/pembayaranSampah'); ?>">
+                                <a class="dropdown-item text-white" href="<?= base_url('penduduk/sampah'); ?>">
                                     <i class="fas fa-plus"></i> Sampah
                                 </a>
                             </div>

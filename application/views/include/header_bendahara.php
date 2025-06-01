@@ -76,12 +76,6 @@
                             </div>
                         </li>
 
-                        <li class="nav-item  mr-3">
-                            <a class="nav-link text-white" href="<?= base_url('warga'); ?>">
-                                <i class="fas fa-check-square"></i> Warga
-                            </a>
-                        </li>
-
                         <li class="nav-item  mr-3 dropdown">
                             <a class="nav-link dropdown-toggle text-white" href="#" id="laporanDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bar-chart-o"></i></i> Laporan
