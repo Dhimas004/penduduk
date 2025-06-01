@@ -80,12 +80,6 @@
                         </li>
 
                         <li class="nav-item  mr-3">
-                            <a class="nav-link text-white" href="<?= base_url('penduduk/laporan'); ?>">
-                                <i class="fas fa-bar-chart-o"></i> Laporan
-                            </a>
-                        </li>
-
-                        <li class="nav-item  mr-3">
                             <a class="nav-link text-white" href="<?= base_url('warga/ubahDataDiri'); ?>">
                                 <i class="fas fa-user"></i> Ubah Data Diri
                             </a>

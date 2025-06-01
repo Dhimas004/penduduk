@@ -61,7 +61,7 @@
                         <!-- Dropdown Kas -->
                         <li class="nav-item  mr-3 dropdown">
                             <a class="nav-link dropdown-toggle text-white" href="#" id="kasDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-credit-card"></i></i> Transaksi
+                                <i class="fas fa-credit-card"></i></i> Pembayaran
                             </a>
                             <div class="dropdown-menu" aria-labelledby="kasDropdown" style="background-color: #393939 !important;">
                                 <a class="dropdown-item text-white" href="<?= base_url('penduduk'); ?>">

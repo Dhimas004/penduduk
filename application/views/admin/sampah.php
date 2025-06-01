@@ -40,7 +40,7 @@
         										<td><?= $s->idKas; ?></td>
         										<td><?= ($s->idWarga != 0 ? $namaWarga[$s->idWarga] : ''); ?></td>
         										<td><?= tgl_indo($s->tanggal); ?></td>
-        										<td><?= tgl_indo($s->created_at); ?></td>
+        										<td><?= ($s->tanggal != '' ? tgl_indo($s->created_at) : ''); ?></td>
         										<td><?php
 													if ($s->status_persetujuan == '0') echo "Belum Disetujui";
 													else if ($s->status_persetujuan == '1') echo "Sudah Disetujui";

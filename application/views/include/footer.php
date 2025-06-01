@@ -40,13 +40,13 @@
 			<div class="modal-dialog modal-dialog-centered modal-sm" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h4 class="modal-title" id="exampleModalLabel">Are you sure?</h4>
+						<h4 class="modal-title" id="exampleModalLabel">Hapus Data</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					</div>
-					<div class="modal-body">Data will deleted permanently</div>
+					<div class="modal-body">Apakah Kamu Yakin Ingin Menghapus Data Ini?</div>
 					<div class="modal-footer">
 						<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-						<a id="btn-delete" class="btn btn-danger" href="#">Delete</a>
+						<a id="btn-delete" class="btn btn-danger" href="#">Hapus</a>
 					</div>
 				</div>
 			</div>

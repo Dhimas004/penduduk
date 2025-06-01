@@ -218,8 +218,11 @@ class Penduduk extends CI_Controller
 
 	public function delKas($idKas)
 	{
-		$this->m_kas->delKas($idKas);
-		if ('jenis' == 'masuk') {
+		// $this->m_kas->delKas($idKas);
+		$jenis = $this->m_kas->getKas([
+			'idKas' => $idKas
+		])['jenis'];
+		if ($jenis == 'masuk') {
 			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil dihapus!</div>');
 			redirect('penduduk');
 		} else {
