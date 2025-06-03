@@ -94,7 +94,7 @@
                                         <label>Nama Warga</label>
                                         <select class="form-control" name="idWarga" id="idWarga" value="<?= set_value('idWarga'); ?>">
                                             <option value="">Pilih ...</option>
-                                            <option value="<?= $warga['idWarga']; ?>" selected><?= $warga['nama']; ?></option>
+                                            <option value="<?= $warga[0]->idWarga; ?>" selected><?= $warga[0]->nama; ?></option>
                                         </select>
                                     </div>
                                     <div class="form-group">

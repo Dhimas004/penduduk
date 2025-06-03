@@ -74,12 +74,6 @@
                         </li>
 
                         <li class="nav-item  mr-3">
-                            <a class="nav-link text-white" href="<?= base_url('warga'); ?>">
-                                <i class="fas fa-check-square"></i> Warga
-                            </a>
-                        </li>
-
-                        <li class="nav-item  mr-3">
                             <a class="nav-link text-white" href="<?= base_url('warga/ubahDataDiri'); ?>">
                                 <i class="fas fa-user"></i> Ubah Data Diri
                             </a>
