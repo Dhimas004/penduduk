@@ -42,7 +42,7 @@
 										?>
         										<tr>
         											<td><?= $msk->idKas; ?></td>
-        											<td><?= ($msk->idWarga != 0 ? $namaWarga[$msk->idWarga] : ''); ?></td>
+        											<td><?= (array_key_exists($msk->idWarga, $namaWarga) ? $namaWarga[$msk->idWarga] : ''); ?></td>
         											<td><?= $msk->keterangan; ?></td>
         											<td><?= tgl_indo($msk->tanggal) ?></td>
         											<td>

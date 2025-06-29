@@ -130,13 +130,45 @@ class M_kas extends CI_Model
 		return $this->db->query('SELECT SUM(jumlah) as total from data_transaksi where jenis="keluar" ')->result();
 	}
 
-	public function getWarga($idWarga = '')
+	public function getWarga($idWarga = '', $filter = [])
 	{
-		if ($idWarga) {
-			return $this->db->where('idWarga', $idWarga)->get('data_warga')->result();
-		} else {
-			return $this->db->order_by('nama', 'ASC')->get('data_warga')->result();
+
+		$this->db->from('data_warga');
+
+		// Jika pencarian berdasarkan ID Warga (misal untuk detail)
+		if (!empty($idWarga)) {
+			$this->db->where('idWarga', $idWarga);
+			return $this->db->get()->result();
 		}
+
+		// Filter berdasarkan parameter pencarian
+		if (!empty($filter['nik'])) {
+			$this->db->like('nik', $filter['nik']);
+		}
+		if (!empty($filter['nama'])) {
+			$this->db->like('nama', $filter['nama']);
+		}
+		if (!empty($filter['jekel'])) {
+			$this->db->where('jekel', $filter['jekel']);
+		}
+		if (!empty($filter['tanggal_lahir'])) {
+			$this->db->where('tanggal_lahir', $filter['tanggal_lahir']);
+		}
+		if (!empty($filter['tempat_lahir'])) {
+			$this->db->like('tempat_lahir', $filter['tempat_lahir']);
+		}
+		if (!empty($filter['alamat'])) {
+			$this->db->like('alamat', $filter['alamat']);
+		}
+		if (!empty($filter['rt_rw'])) {
+			$this->db->like('rt_rw', $filter['rt_rw']);
+		}
+		if (!empty($filter['status_perkawinan'])) {
+			$this->db->where('status_perkawinan', $filter['status_perkawinan']);
+		}
+
+		$this->db->order_by('nama', 'ASC');
+		return $this->db->get()->result();
 	}
 
 	public function saveWarga($data)

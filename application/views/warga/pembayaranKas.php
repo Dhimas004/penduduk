@@ -37,7 +37,7 @@
                                         foreach ($kas as $k) { ?>
                                             <tr>
                                                 <td><?= $k->idKas; ?></td>
-                                                <td><?= ($k->idWarga != 0 ? $namaWarga[$k->idWarga] : ''); ?></td>
+                                                <td><?= (array_key_exists($k->idWarga, $namaWarga) ? $namaWarga[$k->idWarga] : ''); ?></td>
                                                 <td><?= $k->keterangan; ?></td>
                                                 <td><?= date('d-m-Y', strtotime($k->tanggal)); ?></td>
                                                 <td><?= rupiah($k->jumlah); ?></td>
@@ -94,8 +94,13 @@
                                         <label>Nama Warga</label>
                                         <select class="form-control" name="idWarga" id="idWarga" value="<?= set_value('idWarga'); ?>">
                                             <option value="">Pilih ...</option>
-                                            <option value="<?= $warga[0]->idWarga; ?>" selected><?= $warga[0]->nama; ?></option>
+                                            <?php if (array_key_exists($user['idWarga'], $namaWarga)) { ?>
+                                                <option value="<?= $warga[0]->idWarga; ?>" selected><?= $warga[0]->nama; ?></option>
+                                            <?php } ?>
                                         </select>
+                                        <?php if (!array_key_exists($user['idWarga'], $namaWarga)) { ?>
+                                            <small class="text-danger">User Belum Terkonek Dengan Data Warga</small>
+                                        <?php } ?>
                                     </div>
                                     <div class="form-group">
                                         <label>Keterangan</label>

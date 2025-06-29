@@ -189,6 +189,12 @@ class Penduduk extends CI_Controller
 
 	public function addKas()
 	{
+		$jenis = $this->m_kas->getKas([
+			'idKas' => $this->input->post('id_kas')
+		])['jenis'];
+		$status = $this->m_kas->getKas([
+			'idKas' => $this->input->post('id_kas')
+		])['status'];
 		$this->m_kas->cekNomor();
 		$data = [
 			'idKas' => $this->input->post('id_kas'),
@@ -199,17 +205,30 @@ class Penduduk extends CI_Controller
 			'idWarga' => $this->input->post('idWarga'),
 		];
 		$this->m_kas->saveKas($data);
-		if ('jenis' == 'masuk') {
-			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil ditambahkan!</div>');
-			redirect('penduduk');
+		if ($status == 'kas') {
+			// Kas
+			if ($jenis == 'masuk') {
+				$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil ditambahkan!</div>');
+				redirect('penduduk');
+			} else if ($jenis == 'keluar') {
+				$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil ditambahkan!</div>');
+				redirect('penduduk/kasKeluar');
+			}
 		} else {
+			// Sampah
 			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil ditambahkan!</div>');
-			redirect('penduduk/kasKeluar');
+			redirect('penduduk/sampah');
 		}
 	}
 
 	public function editKas()
 	{
+		$jenis = $this->m_kas->getKas([
+			'idKas' => $this->input->post('id_kas')
+		])['jenis'];
+		$status = $this->m_kas->getKas([
+			'idKas' => $this->input->post('id_kas')
+		])['status'];
 		$idKas = $this->input->post('idKas');
 		$data = [
 			'keterangan' => $this->input->post('keterangan'),
@@ -219,21 +238,28 @@ class Penduduk extends CI_Controller
 			'idWarga' => $this->input->post('idWarga'),
 		];
 		$this->m_kas->updateKas($data, $idKas);
-		if ('jenis' == 'masuk') {
-			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil diupdate!</div>');
-			redirect('penduduk');
+		if ($status == 'kas') {
+			// Kas
+			if ($jenis == 'masuk') {
+				$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil diupdate!</div>');
+				redirect('penduduk');
+			} else if ($jenis == 'keluar') {
+				$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil diupdate!</div>');
+				redirect('penduduk/kasKeluar');
+			}
 		} else {
+			// Sampah
 			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil diupdate!</div>');
-			redirect('penduduk');
+			redirect('penduduk/sampah');
 		}
 	}
 
 	public function delKas($idKas)
 	{
-		// $this->m_kas->delKas($idKas);
 		$jenis = $this->m_kas->getKas([
 			'idKas' => $idKas
 		])['jenis'];
+		$this->m_kas->delKas($idKas);
 		if ($jenis == 'masuk') {
 			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil dihapus!</div>');
 			redirect('penduduk');

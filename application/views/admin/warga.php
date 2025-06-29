@@ -18,6 +18,8 @@
         								<i class="zmdi zmdi-plus"></i>warga</button>
         							<a href="<?= base_url(); ?>warga/lapwarga" class="au-btn au-btn-icon au-btn--blue au-btn--small" data-toggle="top">
         								<i class="zmdi zmdi-print"></i>print</a>
+        							<a href="<?= base_url(); ?>warga/cariWarga" class="au-btn au-btn-icon btn-primary au-btn--small" data-toggle="top" style="margin-left: 12px;">
+        								<i class="zmdi zmdi-search"></i>Cari Warga</a>
         						</div>
         					</div>
         					<!-- DATA TABLE-->
@@ -35,30 +37,37 @@
         								</tr>
         							</thead>
         							<tbody>
-        								<?php foreach ($warga as $val): ?>
+        								<?php if (empty($warga)): ?>
         									<tr>
-        										<td><?= $val->nik; ?></td>
-        										<td><?= $val->nama; ?></td>
-        										<td><?= $val->jekel; ?></td>
-        										<td class="process"><?= $val->tempat_lahir; ?>, <?= date('d-m-Y', strtotime($val->tanggal_lahir)); ?></td>
-        										<td><?= $val->alamat; ?></td>
-        										<td><?= $val->rt_rw; ?></td>
-        										<td>
-        											<div class="table-data-feature">
-        												<a class="item" href="<?= base_url('warga/detailWarga/' . $val->idWarga); ?>">
-        													<i class="zmdi zmdi-eye"></i>
-        												</a>
-        												<button class="item" data-toggle="modal" data-target="#editWarga<?= $val->idWarga; ?>" title="Edit">
-        													<i class="zmdi zmdi-edit"></i>
-        												</button>
-        												<button class="item" data-toggle="tooltip" title="Delete">
-        													<a href="#!" onclick="deleteConfirm('<?= base_url('warga/delWarga/' . $val->idWarga); ?>')">
-        														<i class="zmdi zmdi-delete" style="color:red"></i></a>
-        												</button>
-        											</div>
-        										</td>
+        										<td colspan="7" class="text-center text-danger">Tidak ada data warga yang ditemukan.</td>
         									</tr>
-        								<?php endforeach; ?>
+        								<?php else: ?>
+        									<?php foreach ($warga as $val): ?>
+        										<tr>
+        											<td><?= $val->nik; ?></td>
+        											<td><?= $val->nama; ?></td>
+        											<td><?= $val->jekel; ?></td>
+        											<td class="process"><?= $val->tempat_lahir; ?>, <?= date('d-m-Y', strtotime($val->tanggal_lahir)); ?></td>
+        											<td><?= $val->alamat; ?></td>
+        											<td><?= $val->rt_rw; ?></td>
+        											<td>
+        												<div class="table-data-feature">
+        													<a class="item" href="<?= base_url('warga/detailWarga/' . $val->idWarga); ?>">
+        														<i class="zmdi zmdi-eye"></i>
+        													</a>
+        													<button class="item" data-toggle="modal" data-target="#editWarga<?= $val->idWarga; ?>" title="Edit">
+        														<i class="zmdi zmdi-edit"></i>
+        													</button>
+        													<button class="item" data-toggle="tooltip" title="Delete">
+        														<a href="#!" onclick="deleteConfirm('<?= base_url('warga/delWarga/' . $val->idWarga); ?>')">
+        															<i class="zmdi zmdi-delete" style="color:red"></i>
+        														</a>
+        													</button>
+        												</div>
+        											</td>
+        										</tr>
+        									<?php endforeach; ?>
+        								<?php endif; ?>
         							</tbody>
         						</table>
         					</div>

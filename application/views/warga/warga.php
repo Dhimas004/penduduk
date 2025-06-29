@@ -1,6 +1,10 @@
         <!-- PAGE CONTENT-->
         <div class="page-content--bgf7">
         	<!-- DATA TABLE-->
+        	<?php if ($this->session->flashdata('message')): ?>
+        		<br>
+        		<?= $this->session->flashdata('message'); ?>
+        	<?php endif; ?>
         	<section class="p-t-60">
         		<div class="container">
         			<div class="row">

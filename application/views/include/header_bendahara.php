@@ -1,3 +1,12 @@
+<?php
+$jumlah_pending = 0;
+
+if ($user && isset($user['idWarga']) && $user['idWarga'] != '0') {
+    $CI = &get_instance();
+    $CI->load->model('M_PembaruanData');
+    $jumlah_pending = $CI->M_PembaruanData->countPengajuanByWarga($user['idWarga']);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -93,11 +102,15 @@
                             </div>
                         </li>
 
-                        <li class="nav-item  mr-3">
-                            <a class="nav-link text-white" href="<?= base_url('warga/ubahDataDiri'); ?>">
-                                <i class="fas fa-user"></i> Ubah Data Diri
+                        <li class="nav-item mr-3">
+                            <a class="nav-link text-white" href="<?= base_url('warga/pembaruanData'); ?>">
+                                <i class="fas fa-sync-alt"></i> Pembaruan Data
+                                <?php if ($jumlah_pending > 0): ?>
+                                    <span class="badge badge-warning"><?= $jumlah_pending; ?></span>
+                                <?php endif; ?>
                             </a>
                         </li>
+
                     </ul>
 
                     <!-- Akun dropdown -->

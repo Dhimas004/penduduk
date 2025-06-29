@@ -6,12 +6,16 @@ class Admin extends CI_Controller
 	function __construct()
 	{
 		parent::__construct();
+		$this->load->model('M_PembaruanData');
 	}
 
 	public function index()
 	{
 		$username = $this->session->userdata('username');
 		$user = $this->db->get_where('users', ['username' => $username])->row_array();
+		$data['jumlah_pending_rt'] = in_array($user['role_id'], [1])
+			? $this->M_PembaruanData->countAllPending()
+			: 0;
 		if ($username == '') {
 			redirect('auth');
 		} else {

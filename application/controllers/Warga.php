@@ -4,10 +4,39 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Warga extends CI_Controller
 {
 
+	private $jumlah_pending = 0;
+
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->model('M_PembaruanData');
+
+		// Ambil session user
+		$user = $this->session->userdata('user');
+
+		// Hitung jumlah pending hanya jika user login sebagai warga
+		if ($user && isset($user['idWarga']) && $user['idWarga'] != '0') {
+			$this->jumlah_pending = $this->M_PembaruanData->countPengajuanByWarga($user['idWarga']);
+		}
+	}
+
 	public function index()
 	{
 		$username = $this->session->userdata('username');
 		$user = $this->db->get_where('users', ['username' => $username])->row_array();
+		$filter = [
+			'nik' => $this->input->get('nik', TRUE),
+			'nama' => $this->input->get('nama', TRUE),
+			'jekel' => $this->input->get('jekel', TRUE),
+			'tanggal_lahir' => $this->input->get('tanggal_lahir', TRUE),
+			'tempat_lahir' => $this->input->get('tempat_lahir', TRUE),
+			'alamat' => $this->input->get('alamat', TRUE),
+			'rt_rw' => $this->input->get('rt_rw', TRUE),
+			'status_perkawinan' => $this->input->get('status_perkawinan', TRUE),
+		];
+
+		$data['warga'] = $this->m_kas->getWarga('', $filter);
+
 		if ($username == '') {
 			redirect('auth');
 		} else {
@@ -15,7 +44,6 @@ class Warga extends CI_Controller
 				$data['menu'] = 'warga';
 				$data['judul'] = 'Data Warga';
 				$data['user'] = $user;
-				$data['warga'] = $this->m_kas->getWarga();
 				$this->load->view('include/header', $data);
 				$this->load->view('admin/warga', $data);
 				$this->load->view('include/footer');
@@ -23,7 +51,6 @@ class Warga extends CI_Controller
 				$data['menu'] = 'warga';
 				$data['judul'] = 'Data Warga';
 				$data['user'] = $user;
-				$data['warga'] = $this->m_kas->getWarga();
 				$this->load->view('include/header_bendahara', $data);
 				$this->load->view('warga/warga', $data);
 				$this->load->view('include/footer');
@@ -31,8 +58,6 @@ class Warga extends CI_Controller
 				$data['menu'] = 'warga';
 				$data['judul'] = 'Data Warga';
 				$data['user'] = $user;
-				$data['user'] = $user;
-				$data['warga'] = $this->m_kas->getWarga();
 				$this->load->view('include/header_warga', $data);
 				$this->load->view('warga/warga', $data);
 				$this->load->view('include/footer');
@@ -109,8 +134,116 @@ class Warga extends CI_Controller
 		$this->load->view('laporan/lap_warga', $data);
 	}
 
+	public function cariWarga()
+	{
+
+		$data['judul'] = 'Cari Warga';
+		$data['query'] = $this->m_kas->getWarga();
+		$data['konten'] = 'cariWarga';
+		$username = $this->session->userdata('username');
+		$user = $this->db->get_where('users', ['username' => $username])->row_array();
+		$data['user'] = $user;
+
+		$this->load->view('include/header', $data);
+		$this->load->view('warga/cariWarga', $data);
+		$this->load->view('include/footer');
+	}
+
+	public function pembaruanData()
+	{
+		$data['judul'] = 'Pembaruan Data';
+
+		$data['konten'] = 'pembaruanData';
+		$username = $this->session->userdata('username');
+		$user = $this->db->get_where('users', ['username' => $username])->row_array();
+		$data['user'] = $user;
+		if ($user['idWarga'] != '0') $data['dataWarga'] = $this->m_kas->getWarga($user['idWarga'])[0];
+		if ($user['role_id'] == 1) {
+			// RT
+			$this->load->view('include/header', $data);
+		} else if ($user['role_id'] == 5) {
+			// Bendahara
+			$this->load->view('include/header_bendahara', $data);
+		} else if ($user['role_id'] == 4) {
+			// Warga
+			$this->load->view('include/header_warga', $data);
+		}
+
+		$this->load->view('warga/pembaruanData', $data);
+		$this->load->view('include/footer');
+	}
+
+	public function pembaruanDataAction()
+	{
+		$username = $this->session->userdata('username');
+		$user = $this->db->get_where('users', ['username' => $username])->row_array();
+
+		// Cek apakah user login dan punya idWarga
+		if (!$user || $user['idWarga'] == '0') {
+			$this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Akses tidak valid.</div>');
+			redirect('warga');
+			return;
+		}
+
+		$this->load->model('M_PembaruanData');
+
+		$data = [
+			'id_warga'          => $user['idWarga'],
+			'nik'               => $this->input->post('nik', true),
+			'nama'              => $this->input->post('nama', true),
+			'jekel'             => $this->input->post('jekel', true),
+			'tempat_lahir'      => $this->input->post('tempat_lahir', true),
+			'tanggal_lahir'     => $this->input->post('tanggal_lahir', true),
+			'alamat'            => $this->input->post('alamat', true),
+			'rt_rw'             => $this->input->post('rt_rw', true),
+			'status_perkawinan' => $this->input->post('status_perkawinan', true),
+			'nama_pasangan'     => $this->input->post('nama_pasangan', true),
+			'nama_anak_1'       => $this->input->post('nama_anak_1', true),
+			'nama_anak_2'       => $this->input->post('nama_anak_2', true),
+			'nama_anak_3'       => $this->input->post('nama_anak_3', true),
+			'nama_anak_4'       => $this->input->post('nama_anak_4', true),
+			'nama_anak_5'       => $this->input->post('nama_anak_5', true),
+			'status_acc'        => 'pending',
+			'tanggal_pengajuan' => date('Y-m-d H:i:s')
+		];
+
+		// Upload PDF jika ada
+		if (!empty($_FILES['berkas']['name'])) {
+			$upload_path = './uploads/berkas/';
+			if (!is_dir($upload_path)) {
+				mkdir($upload_path, 0755, true);
+			}
+
+			$config['upload_path']   = $upload_path;
+			$config['allowed_types'] = 'pdf';
+			$config['max_size']      = 2048;
+			$config['file_name']     = 'berkas_' . time();
+
+			$this->load->library('upload', $config);
+
+			if ($this->upload->do_upload('berkas')) {
+				$uploadData = $this->upload->data();
+				$data['berkas'] = $uploadData['file_name'];
+			} else {
+				$this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">' . $this->upload->display_errors() . '</div>');
+				redirect('warga/pembaruanData');
+				return;
+			}
+		}
+
+		$this->M_PembaruanData->insertPembaruan($data);
+		$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Pembaruan data berhasil dikirim dan menunggu persetujuan RT.</div>');
+		redirect('warga');
+	}
+
+
+
 	public function ubahDataDiri()
 	{
+		$data['namaWarga'] = []; // Array untuk menyimpan nama warga
+		foreach ($this->m_kas->getWarga() as $w) {
+			$data['namaWarga'][$w->idWarga] = ucwords(strtolower($w->nama));
+		}
 		$username = $this->session->userdata('username');
 		$user = $this->db->get_where('users', ['username' => $username])->row_array();
 		$data['user'] = $user;
@@ -119,10 +252,27 @@ class Warga extends CI_Controller
 		if ($username == '') {
 			redirect('auth');
 		} else {
-			$data['judul'] = 'Ubah Data Diri';
-			$this->load->view('include/header_warga', $data);
-			$this->load->view('warga/ubah_data_diri', $data);
-			$this->load->view('include/footer');
+
+
+			if ($user['role_id'] == 1) {
+				// RT
+				$data['judul'] = 'Ubah Data Diri';
+				$this->load->view('include/header', $data);
+				$this->load->view('warga/ubah_data_diri', $data);
+				$this->load->view('include/footer');
+			} else if ($user['role_id'] == 5) {
+				// Bendahara
+				$data['judul'] = 'Ubah Data Diri';
+				$this->load->view('include/header_bendahara', $data);
+				$this->load->view('warga/ubah_data_diri', $data);
+				$this->load->view('include/footer');
+			} else if ($user['role_id'] == 4) {
+				// Warga
+				$data['judul'] = 'Ubah Data Diri';
+				$this->load->view('include/header_warga', $data);
+				$this->load->view('warga/ubah_data_diri', $data);
+				$this->load->view('include/footer');
+			}
 		}
 	}
 
@@ -240,6 +390,7 @@ class Warga extends CI_Controller
 
 	public function PembayaranSampah()
 	{
+
 		$username = $this->session->userdata('username');
 		$user = $this->db->get_where('users', ['username' => $username])->row_array();
 		$data = [];

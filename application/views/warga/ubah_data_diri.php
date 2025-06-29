@@ -14,7 +14,7 @@
                         </div>
                         <div style="width: 100%;">
                             <?php
-                            if ($user['idWarga'] != 0) {
+                            if (array_key_exists($user['idWarga'], $namaWarga)) {
                             ?>
                                 <table class="table table-bordered table-striped table-hover">
                                     <tbody>

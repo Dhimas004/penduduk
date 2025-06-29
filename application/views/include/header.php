@@ -1,3 +1,10 @@
+<?php
+if ($user && $user['role_id'] == '1') {
+    $CI = &get_instance();
+    $CI->load->model('M_PembaruanData');
+    $jumlah_pending_rt = $CI->M_PembaruanData->countAllPending();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -105,12 +112,21 @@
                             </a>
                         </li>
 
+                        <li class="nav-item mr-3">
+                            <a class="nav-link text-white" href="<?= base_url('rt/accPembaruanData'); ?>">
+                                <i class="fa fa-edit"></i> ACC Pembaruan
+                                <?php if (!empty($jumlah_pending_rt) && $jumlah_pending_rt > 0): ?>
+                                    <span class="badge badge-warning"><?= $jumlah_pending_rt; ?></span>
+                                <?php endif; ?>
+                            </a>
+                        </li>
 
-                        <li class="nav-item  mr-3">
+
+                        <!-- <li class="nav-item  mr-3">
                             <a class="nav-link text-white" href="<?= base_url('warga/ubahDataDiri'); ?>">
                                 <i class="fas fa-user"></i> Ubah Data Diri
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
 
                     <!-- Akun dropdown -->

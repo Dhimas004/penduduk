@@ -39,7 +39,7 @@
 										?>
         									<tr>
         										<td><?= $s->idKas; ?></td>
-        										<td><?= ($s->idWarga != 0 ? $namaWarga[$s->idWarga] : ''); ?></td>
+        										<td><?= (array_key_exists($s->idWarga, $namaWarga) ? $namaWarga[$s->idWarga] : ''); ?></td>
         										<td><?= tgl_indo($s->tanggal); ?></td>
         										<td><?= ($s->tanggal != '' ? tgl_indo($s->created_at) : ''); ?></td>
         										<td><?php
@@ -117,6 +117,11 @@
 											}
 											?>
         								</select>
+        								<?php if ($user['role_id'] == '4') { ?>
+        									<?php if (!array_key_exists($user['idWarga'], $namaWarga)) { ?>
+        										<small class="text-danger">User Belum Terkonek Dengan Data Warga</small>
+        									<?php } ?>
+        								<?php } ?>
         							</div>
         							<div class="form-group">
         								<label>Tanggal Pembayaran</label>
