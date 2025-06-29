@@ -2,6 +2,15 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
+/**
+ * @property CI_DB_query_builder $db
+ * @property CI_Session $session
+ * @property CI_Input $input
+ * @property M_PembaruanData $M_PembaruanData
+ * @property M_Kas $m_kas
+ * @property CI_Upload $upload
+ */
+
 class Users extends CI_Controller
 {
 

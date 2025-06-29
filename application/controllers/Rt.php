@@ -1,6 +1,13 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+
+/**
+ * @property CI_DB_query_builder $db
+ * @property CI_Session $session
+ * @property M_PembaruanData $M_PembaruanData
+ */
+
 class Rt extends CI_Controller
 {
 	public function __construct()

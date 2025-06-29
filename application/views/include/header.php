@@ -1,5 +1,6 @@
 <?php
 if ($user && $user['role_id'] == '1') {
+    /** @var M_PembaruanData $CI */
     $CI = &get_instance();
     $CI->load->model('M_PembaruanData');
     $jumlah_pending_rt = $CI->M_PembaruanData->countAllPending();
