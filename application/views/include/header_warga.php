@@ -2,6 +2,7 @@
 $jumlah_pending = 0;
 
 if ($user && isset($user['idWarga']) && $user['idWarga'] != '0') {
+    /** @var M_PembaruanData $CI */
     $CI = &get_instance();
     $CI->load->model('M_PembaruanData');
     $jumlah_pending = $CI->M_PembaruanData->countPengajuanByWarga($user['idWarga']);
@@ -68,7 +69,7 @@ if ($user && isset($user['idWarga']) && $user['idWarga'] != '0') {
                         </li>
 
                         <!-- Dropdown Pembayaran -->
-                        <li class="nav-item  mr-3 dropdown">
+                        <!-- <li class="nav-item  mr-3 dropdown">
                             <a class="nav-link dropdown-toggle text-white" href="#" id="pembayaranDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-credit-card"></i></i> Pembayaran
                             </a>
@@ -80,7 +81,7 @@ if ($user && isset($user['idWarga']) && $user['idWarga'] != '0') {
                                     <i class="fas fa-plus"></i> Sampah
                                 </a>
                             </div>
-                        </li>
+                        </li> -->
 
                         <!-- <li class="nav-item  mr-3">
                             <a class="nav-link text-white" href="<?= base_url('warga/ubahDataDiri'); ?>">
